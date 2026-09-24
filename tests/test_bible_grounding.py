@@ -1,6 +1,6 @@
 """Tests for deterministic sermon-title Bible grounding."""
 
-from choirnetwork.bible_grounding import (
+from experiments.bible_grounding import (
     BibleGrounder,
     BibleIndex,
     BibleVerse,

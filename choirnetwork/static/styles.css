@@ -138,51 +138,6 @@ button[type="submit"]:disabled {
   cursor: wait;
 }
 
-.option-row {
-  margin-top: 1.25rem;
-}
-
-.option-row .control-hint {
-  margin-top: 0.5rem;
-  margin-left: 0.15rem;
-}
-
-.mode-option.disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.mode-option.disabled input {
-  cursor: not-allowed;
-}
-
-.mode-toggle {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  flex-wrap: wrap;
-}
-
-.mode-option {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.55rem 0.85rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: #fff;
-  font-size: 0.92rem;
-  cursor: pointer;
-  user-select: none;
-}
-
-.mode-option:has(input:checked) {
-  border-color: rgba(29, 75, 107, 0.35);
-  background: rgba(29, 75, 107, 0.06);
-  color: var(--accent);
-  font-weight: 600;
-}
-
 .control {
   margin-top: 1rem;
 }
@@ -296,17 +251,21 @@ input[type="range"] {
   font-size: 0.9rem;
 }
 
-.score-bar {
-  height: 6px;
-  border-radius: 999px;
-  background: var(--bg-accent);
-  overflow: hidden;
+.result-context {
+  margin-top: 0.55rem;
+  color: var(--muted);
+  font-size: 0.88rem;
 }
 
-.score-fill {
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--gold), var(--accent-soft));
+.result-context summary {
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.result-context p {
+  white-space: pre-line;
+  line-height: 1.5;
 }
 
 .result-link {

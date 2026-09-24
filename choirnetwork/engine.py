@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 import numpy as np
@@ -14,15 +14,17 @@ from choirnetwork.preprocess import (
     build_hymn_chunks,
     preprocess_text,
 )
-from choirnetwork.query_expand import expand_query
-from choirnetwork.scraper import HymnRecord, hymn_label, load_hymns, parse_slug
+from choirnetwork.scraper import HymnRecord, hymn_label
 from choirnetwork.theme_boost import extract_theme_keywords, lyric_keyword_boost
 
 DEFAULT_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 DEFAULT_CROSS_ENCODER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 DEFAULT_RECALL_K = 50
 INDEX_VERSION = 2
-THRESHOLD_RESULT_LIMIT = 50
+# Preserve the frozen benchmark's k=5 fallback, independently of requested k.
+# This is a ranking heuristic, not a calibrated probability of relevance.
+RERANK_MIN_RESULTS = 5
+RERANK_MIN_SCORE = 0.005
 
 
 @dataclass(frozen=True)
@@ -32,6 +34,7 @@ class SimilarHymn:
     slug: str
     title: str
     score: float
+    snippet: str = ""
 
     @property
     def label(self) -> str:
@@ -53,12 +56,7 @@ class HymnIndex:
     chunk_hymn_indices: np.ndarray | None = None
     chunk_weights: np.ndarray | None = None
     chunk_snippets: list[str] | None = None
-    embeddings: np.ndarray | None = None
     lyrics_preprocessed: list[str] | None = None
-
-    @property
-    def is_chunked(self) -> bool:
-        return self.chunk_embeddings is not None
 
     def save(self, directory: Path) -> None:
         directory.mkdir(parents=True, exist_ok=True)
@@ -73,15 +71,11 @@ class HymnIndex:
             "slugs": self.slugs,
             "titles": self.titles,
         }
-        if self.is_chunked:
-            metadata["chunk_snippets"] = self.chunk_snippets
-            if self.lyrics_preprocessed:
-                metadata["lyrics_preprocessed"] = self.lyrics_preprocessed
-            np.save(directory / "chunk_embeddings.npy", self.chunk_embeddings)
-            np.save(directory / "chunk_hymn_indices.npy", self.chunk_hymn_indices)
-            np.save(directory / "chunk_weights.npy", self.chunk_weights)
-        else:
-            np.save(directory / "embeddings.npy", self.embeddings)
+        metadata["chunk_snippets"] = self.chunk_snippets
+        metadata["lyrics_preprocessed"] = self.lyrics_preprocessed
+        np.save(directory / "chunk_embeddings.npy", self.chunk_embeddings)
+        np.save(directory / "chunk_hymn_indices.npy", self.chunk_hymn_indices)
+        np.save(directory / "chunk_weights.npy", self.chunk_weights)
 
         with (directory / "metadata.json").open("w", encoding="utf-8") as file:
             json.dump(metadata, file, indent=2, ensure_ascii=False)
@@ -91,45 +85,29 @@ class HymnIndex:
         with (directory / "metadata.json").open(encoding="utf-8") as file:
             metadata = json.load(file)
 
-        slugs = metadata.get("slugs") or [str(number) for number in metadata["numbers"]]
-        index_version = metadata.get("index_version", 1)
-
-        if index_version >= INDEX_VERSION and (directory / "chunk_embeddings.npy").exists():
-            return cls(
-                model_name=metadata["model_name"],
-                numbers=metadata["numbers"],
-                variants=metadata.get("variants", [""] * len(slugs)),
-                slugs=slugs,
-                titles=metadata["titles"],
-                index_version=index_version,
-                cross_encoder_model_name=metadata.get(
-                    "cross_encoder_model_name",
-                    DEFAULT_CROSS_ENCODER_MODEL,
-                ),
-                title_weight=metadata.get("title_weight", DEFAULT_TITLE_WEIGHT),
-                recall_k=metadata.get("recall_k", DEFAULT_RECALL_K),
-                chunk_embeddings=np.load(directory / "chunk_embeddings.npy"),
-                chunk_hymn_indices=np.load(directory / "chunk_hymn_indices.npy"),
-                chunk_weights=np.load(directory / "chunk_weights.npy"),
-                chunk_snippets=metadata.get("chunk_snippets", []),
-                lyrics_preprocessed=metadata.get("lyrics_preprocessed"),
-            )
-
-        return cls(
-            model_name=metadata["model_name"],
-            numbers=metadata["numbers"],
-            variants=metadata.get("variants", [""] * len(slugs)),
-            slugs=slugs,
-            titles=metadata["titles"],
-            index_version=index_version,
-            embeddings=np.load(directory / "embeddings.npy"),
+        if metadata.get("index_version") != INDEX_VERSION:
+            raise ValueError("Unsupported index format. Run: python -m choirnetwork build")
+        count = len(metadata["slugs"])
+        lyrics = metadata.get("lyrics_preprocessed")
+        if lyrics is None or len(lyrics) != count:
+            raise ValueError("Index is missing lyrics. Run: python -m choirnetwork build")
+        index = cls(
+            **metadata,
+            chunk_embeddings=np.load(directory / "chunk_embeddings.npy"),
+            chunk_hymn_indices=np.load(directory / "chunk_hymn_indices.npy"),
+            chunk_weights=np.load(directory / "chunk_weights.npy"),
         )
-
-    def slug_index(self, slug: str) -> int:
-        try:
-            return self.slugs.index(slug.lower())
-        except ValueError as exc:
-            raise ValueError(f"Hymn {slug} is not in the index") from exc
+        chunks = len(index.chunk_embeddings)
+        if not (
+            len(index.numbers) == len(index.variants) == len(index.titles) == count
+            and len(set(index.slugs)) == count
+            and len(index.chunk_hymn_indices) == len(index.chunk_weights)
+            == len(index.chunk_snippets) == chunks
+            and chunks > 0
+            and np.all((index.chunk_hymn_indices >= 0) & (index.chunk_hymn_indices < count))
+        ):
+            raise ValueError("Inconsistent index artifacts. Run: python -m choirnetwork build")
+        return index
 
     def hymn_at(self, idx: int, score: float) -> SimilarHymn:
         return SimilarHymn(
@@ -152,17 +130,6 @@ def _sigmoid(value: float) -> float:
     return float(1.0 / (1.0 + np.exp(-value)))
 
 
-def _display_percent(score: float) -> int:
-    """Match frontend Math.round(score * 100)."""
-    if score <= 0:
-        return 0
-    return int(score * 100 + 0.5)
-
-
-def _filter_displayable(matches: list[SimilarHymn]) -> list[SimilarHymn]:
-    return [match for match in matches if _display_percent(match.score) > 0]
-
-
 class HymnSimilarityEngine:
     def __init__(
         self,
@@ -172,8 +139,8 @@ class HymnSimilarityEngine:
         use_lyric_boost: bool = True,
     ):
         self.index = index
-        self.use_reranker = use_reranker and index.is_chunked
-        self.use_lyric_boost = use_lyric_boost and index.is_chunked
+        self.use_reranker = use_reranker
+        self.use_lyric_boost = use_lyric_boost
         self._model: SentenceTransformer | None = None
         self._cross_encoder: CrossEncoder | None = None
 
@@ -259,66 +226,30 @@ class HymnSimilarityEngine:
         query: str,
         *,
         top_k: int = 10,
-        min_score: float = 0.0,
-        exclude_slug: str | None = None,
-        expand_query_flag: bool = False,
-        use_llm_expansion: bool = False,
         retrieval_query: str | None = None,
         rerank_query: str | None = None,
     ) -> list[SimilarHymn]:
-        """Rank hymns by similarity. top_k=0 returns all matches above min_score.
-
-        retrieval_query and rerank_query expose the two query stages for
-        controlled evaluation. They default to the original user query.
-        """
+        """Return a prefix of one ranking; optional query overrides support experiments."""
+        if not query.strip():
+            raise ValueError("Query cannot be empty")
+        if not 1 <= top_k <= self.index.recall_k:
+            raise ValueError(f"top_k must be between 1 and {self.index.recall_k}")
         search_query = retrieval_query or query
-        if expand_query_flag and retrieval_query is None:
-            search_query, _ = expand_query(query, use_llm=use_llm_expansion)
-        cross_encoder_query = rerank_query or query
-
-        if self.index.is_chunked:
-            return self._search_chunked(
-                search_query,
-                rerank_query=cross_encoder_query,
-                query_embedding=self._encode_query(search_query),
-                top_k=top_k,
-                min_score=min_score,
-                exclude_slug=exclude_slug,
-            )
-
-        return self._rank_legacy(
-            self._encode_query(search_query),
-            top_k=top_k,
-            min_score=min_score,
-            exclude_slug=exclude_slug,
-        )
-
-    def search_by_slug(self, slug: str, *, top_k: int = 2) -> list[SimilarHymn]:
-        idx = self.index.slug_index(slug)
-        if self.index.is_chunked:
-            assert self.index.chunk_embeddings is not None
-            assert self.index.chunk_hymn_indices is not None
-            mask = self.index.chunk_hymn_indices == idx
-            source_embeddings = self.index.chunk_embeddings[mask]
-            query_embedding = source_embeddings.mean(axis=0)
-            norm = np.linalg.norm(query_embedding)
-            if norm > 0:
-                query_embedding = query_embedding / norm
-            return self._search_chunked(
-                query=self.index.titles[idx],
-                query_embedding=query_embedding,
-                top_k=top_k,
-                min_score=0.0,
-                exclude_slug=slug,
-            )
-
-        assert self.index.embeddings is not None
-        return self._rank_legacy(
-            self.index.embeddings[idx],
-            top_k=top_k,
-            min_score=0.0,
-            exclude_slug=slug,
-        )
+        hymn_scores, chunk_scores = self._chunk_scores(self._encode_query(search_query))
+        if self.use_lyric_boost:
+            hymn_scores = self._apply_lyric_boost(hymn_scores, search_query)
+        candidates = [
+            (int(idx), _normalize_bi_encoder_score(float(hymn_scores[idx]), self.index.title_weight))
+            for idx in np.argsort(-hymn_scores)[:self.index.recall_k]
+            if np.isfinite(hymn_scores[idx])
+        ]
+        ranked = self._rerank_candidates(rerank_query or query, candidates, chunk_scores)
+        return [
+            replace(match, snippet=self._best_lyric_stanza(
+                self.index.slugs.index(match.slug), chunk_scores
+            ))
+            for match in ranked[:top_k]
+        ]
 
     def _chunk_scores(self, query_embedding: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         assert self.index.chunk_embeddings is not None
@@ -366,6 +297,25 @@ class HymnSimilarityEngine:
         best_chunk_idx = chunk_indices[int(weighted_chunk_scores[chunk_indices].argmax())]
         return self.index.chunk_snippets[best_chunk_idx]
 
+    def _best_lyric_stanza(
+        self,
+        hymn_idx: int,
+        weighted_chunk_scores: np.ndarray,
+    ) -> str:
+        """Return the closest lyric stanza for display as match context."""
+        assert self.index.chunk_hymn_indices is not None
+        assert self.index.chunk_weights is not None
+        assert self.index.chunk_snippets is not None
+
+        mask = (self.index.chunk_hymn_indices == hymn_idx) & (
+            self.index.chunk_weights < self.index.title_weight
+        )
+        chunk_indices = np.flatnonzero(mask)
+        if len(chunk_indices) == 0:
+            return ""
+        best_idx = chunk_indices[int(weighted_chunk_scores[chunk_indices].argmax())]
+        return self.index.chunk_snippets[best_idx]
+
     def _rerank_candidates(
         self,
         query: str,
@@ -376,13 +326,7 @@ class HymnSimilarityEngine:
             return []
 
         if not self.use_reranker:
-            return [
-                self.index.hymn_at(
-                    idx,
-                    _normalize_bi_encoder_score(score, self.index.title_weight),
-                )
-                for idx, score in candidates
-            ]
+            return [self.index.hymn_at(idx, score) for idx, score in candidates]
 
         pairs = []
         for hymn_idx, _ in candidates:
@@ -395,131 +339,20 @@ class HymnSimilarityEngine:
             key=lambda item: float(item[1]),
             reverse=True,
         )
-        return [
+        accepted = [
             self.index.hymn_at(hymn_idx, _sigmoid(float(cross_score)))
             for (hymn_idx, _), cross_score in reranked
+            if _sigmoid(float(cross_score)) >= RERANK_MIN_SCORE
         ]
-
-    def _search_chunked(
-        self,
-        query: str,
-        *,
-        rerank_query: str | None = None,
-        query_embedding: np.ndarray,
-        top_k: int,
-        min_score: float,
-        exclude_slug: str | None,
-    ) -> list[SimilarHymn]:
-        rerank_query = rerank_query or query
-        hymn_scores, weighted_chunk_scores = self._chunk_scores(query_embedding)
-        if self.use_lyric_boost:
-            hymn_scores = self._apply_lyric_boost(hymn_scores, query)
-        recall_limit = self.index.recall_k if top_k > 0 else THRESHOLD_RESULT_LIMIT
-        title_weight = self.index.title_weight
-
-        candidates: list[tuple[int, float]] = []
-        for idx in np.argsort(-hymn_scores):
-            normalized = _normalize_bi_encoder_score(float(hymn_scores[idx]), title_weight)
-            if normalized < min_score:
-                break
-            slug = self.index.slugs[idx]
-            if exclude_slug and slug == exclude_slug.lower():
-                continue
-            candidates.append((int(idx), normalized))
-            if len(candidates) == recall_limit:
-                break
-
-        reranked = self._rerank_candidates(rerank_query, candidates, weighted_chunk_scores)
-        limit = top_k if top_k > 0 else THRESHOLD_RESULT_LIMIT
-        displayable = _filter_displayable(reranked)
-
-        # Only trust rerank when we have enough confident results; otherwise
-        # a single low-score hit (e.g. 4%) would hide better bi-encoder matches.
-        if len(displayable) >= limit:
-            return displayable[:limit]
-
-        if candidates:
-            fallback = [self.index.hymn_at(idx, score) for idx, score in candidates[:limit]]
-            displayable_fallback = _filter_displayable(fallback)
-            return displayable_fallback[:limit] if displayable_fallback else fallback[:limit]
-
-        return displayable[:limit]
-
-    def _finalize_results(self, matches: list[SimilarHymn], *, top_k: int) -> list[SimilarHymn]:
-        displayable = _filter_displayable(matches)
-        limit = top_k if top_k > 0 else THRESHOLD_RESULT_LIMIT
-        return displayable[:limit]
-
-    def _rank_legacy(
-        self,
-        query_embedding: np.ndarray,
-        *,
-        top_k: int,
-        min_score: float,
-        exclude_slug: str | None,
-    ) -> list[SimilarHymn]:
-        assert self.index.embeddings is not None
-        scores = self.index.embeddings @ query_embedding
-        limit = top_k if top_k > 0 else THRESHOLD_RESULT_LIMIT
-
-        results: list[SimilarHymn] = []
-        for idx in np.argsort(-scores):
-            score = float(scores[idx])
-            if score < min_score:
-                break
-            slug = self.index.slugs[idx]
-            if exclude_slug and slug == exclude_slug.lower():
-                continue
-            results.append(self.index.hymn_at(idx, score))
-            if len(results) == limit:
-                break
-
-        return self._finalize_results(results, top_k=top_k)
-
-    def resolve_slug(self, hymn_id: str) -> str:
-        normalized = hymn_id.lower().strip()
-        if normalized in self.index.slugs:
-            return normalized
-
-        number, variant = parse_slug(normalized)
-        if variant:
-            raise ValueError(f"Hymn {hymn_id} is not in the index")
-
-        matches = [slug for slug in self.index.slugs if parse_slug(slug)[0] == number]
-        if len(matches) == 1:
-            return matches[0]
-        if len(matches) > 1:
-            labels = ", ".join(
-                f"{n}{v.upper()}" if v else str(n)
-                for slug in matches
-                for n, v in [parse_slug(slug)]
-            )
-            raise ValueError(
-                f"Hymn {number} has multiple variants ({labels}). "
-                f"Specify one, e.g. {matches[0]}."
-            )
-        raise ValueError(f"Hymn {hymn_id} is not in the index")
-
-
-def _backfill_lyrics(index: HymnIndex, hymns_path: Path | None = None) -> None:
-    """Load preprocessed lyrics for lyric boosting when the index omits them."""
-    if index.lyrics_preprocessed and len(index.lyrics_preprocessed) == len(index.slugs):
-        return
-
-    hymns_path = hymns_path or Path("data/raw/hymns.json")
-    if not hymns_path.exists():
-        index.lyrics_preprocessed = [""] * len(index.slugs)
-        return
-
-    slug_to_lyrics = {hymn.slug: hymn.lyrics for hymn in load_hymns(hymns_path)}
-    index.lyrics_preprocessed = [
-        preprocess_text(slug_to_lyrics.get(slug, ""), remove_stop_words=False)
-        for slug in index.slugs
-    ]
-
-
-def save_engine(engine: HymnSimilarityEngine, directory: Path) -> None:
-    engine.index.save(directory)
+        if len(accepted) >= RERANK_MIN_RESULTS:
+            accepted_indices = {match.slug for match in accepted}
+            dense_tail = [
+                self.index.hymn_at(idx, score)
+                for idx, score in candidates
+                if self.index.slugs[idx] not in accepted_indices
+            ]
+            return accepted + dense_tail
+        return [self.index.hymn_at(idx, score) for idx, score in candidates]
 
 
 def load_engine(
@@ -529,7 +362,6 @@ def load_engine(
     use_lyric_boost: bool = True,
 ) -> HymnSimilarityEngine:
     index = HymnIndex.load(directory)
-    _backfill_lyrics(index)
     return HymnSimilarityEngine(
         index,
         use_reranker=use_reranker,

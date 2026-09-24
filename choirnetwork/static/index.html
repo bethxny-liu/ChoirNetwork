@@ -20,7 +20,7 @@
         <p class="eyebrow">True Jesus Church Hymnal</p>
         <h1>ChoirNetwork</h1>
         <p class="subtitle">
-          Enter a sermon title and discover hymns with the closest thematic match.
+          Enter a sermon title to find related hymns for your service.
         </p>
       </header>
 
@@ -34,30 +34,10 @@
               type="text"
               placeholder="e.g. The Grace of God, Walking in Faith..."
               autocomplete="off"
+              maxlength="300"
               required
             />
             <button type="submit" id="submit-btn">Find hymns</button>
-          </div>
-
-          <div class="option-row">
-            <label class="mode-option" id="llm-expand-label">
-              <input type="checkbox" id="llm-expand" />
-              <span>Refine query</span>
-            </label>
-            <p id="llm-expand-hint" class="control-hint">
-              Adds related search terms for broad sermon topics (uses OpenAI).
-            </p>
-          </div>
-
-          <div class="mode-toggle" role="radiogroup" aria-label="Result mode">
-            <label class="mode-option">
-              <input type="radio" name="mode" value="top_k" checked />
-              <span>Top results</span>
-            </label>
-            <label class="mode-option">
-              <input type="radio" name="mode" value="threshold" />
-              <span>Similarity threshold</span>
-            </label>
           </div>
 
           <div id="top-k-control" class="control">
@@ -68,21 +48,6 @@
             <input id="top-k" type="range" min="3" max="25" value="10" step="1" />
           </div>
 
-          <div id="threshold-control" class="control hidden">
-            <div class="control-header">
-              <label for="min-score">Minimum similarity</label>
-              <output id="min-score-value">25%</output>
-            </div>
-            <input
-              id="min-score"
-              type="range"
-              min="10"
-              max="70"
-              value="25"
-              step="1"
-            />
-            <p class="control-hint">Shows all hymns above this score (up to 50).</p>
-          </div>
         </form>
       </section>
 
@@ -98,7 +63,10 @@
     </main>
 
     <footer class="footer">
-      <p>Searches the 536-entry TJC English hymnal.</p>
+      <p>
+        Searches the 536-entry TJC English hymnal. Recommendations are a starting
+        point; consider the passage, congregation, and service context.
+      </p>
     </footer>
 
     <script src="/static/app.js" type="module"></script>

@@ -1,63 +1,47 @@
+import pytest
+from fastapi import HTTPException
+from pydantic import ValidationError
+
 from choirnetwork import api
+from choirnetwork.engine import SimilarHymn
 
 
-class _FakeIndex:
-    slugs = ["1", "2"]
-
-
-class _FakeEngine:
-    index = _FakeIndex()
-
+class FakeEngine:
     def __init__(self):
         self.calls = []
 
     def search(self, query, **kwargs):
         self.calls.append((query, kwargs))
-        return []
+        return [SimilarHymn(1, "", "1", "Grace", 0.5)]
 
 
-def test_search_expands_once_and_passes_the_result_to_retrieval(monkeypatch):
-    engine = _FakeEngine()
-    expansion_calls = []
-
-    def expand(query, *, use_llm):
-        expansion_calls.append((query, use_llm))
-        return f"{query} mercy grace", "curated"
-
-    monkeypatch.setattr(api, "_engine", engine)
-    monkeypatch.setattr(api, "expand_query", expand)
-    monkeypatch.setattr(api, "USE_QUERY_EXPANSION", True)
-    monkeypatch.setattr(api, "USE_LLM_EXPANSION", False)
-
-    response = api.search_hymns(api.SearchRequest(query="Repentance"))
-
-    assert expansion_calls == [("Repentance", False)]
-    assert engine.calls == [
-        (
-            "Repentance",
-            {
-                "top_k": 10,
-                "min_score": 0.0,
-                "retrieval_query": "Repentance mercy grace",
-            },
-        )
-    ]
-    assert response.expansion_source == "curated"
+@pytest.fixture
+def client(monkeypatch):
+    engine = FakeEngine()
+    monkeypatch.setattr(api.app.state, "engine", engine, raising=False)
+    return engine
 
 
-def test_threshold_mode_uses_zero_top_k(monkeypatch):
-    engine = _FakeEngine()
-    monkeypatch.setattr(api, "_engine", engine)
-    monkeypatch.setattr(api, "USE_QUERY_EXPANSION", False)
-    monkeypatch.setattr(api, "USE_LLM_EXPANSION", False)
+def test_api_uses_default_search_without_expansion_or_percentages(client):
+    engine = client
+    response = api.search_hymns(api.SearchRequest(query=" Grace ", top_k=5))
+    assert engine.calls == [("Grace", {"top_k": 5})]
+    assert response.model_dump() == {"query": "Grace", "results": [
+        {"label": "1", "title": "Grace", "url": "https://hymnal.tjc.org/hymnal-library/1", "snippet": ""}
+    ]}
 
-    api.search_hymns(
-        api.SearchRequest(
-            query="Grace",
-            mode="threshold",
-            min_score=0.4,
-        )
-    )
 
-    assert engine.calls[0][1]["top_k"] == 0
-    assert engine.calls[0][1]["min_score"] == 0.4
+@pytest.mark.parametrize("payload,status", [
+    ({"query": " "}, 400), ({"query": "x" * 301}, 422),
+    ({"query": "Grace", "top_k": 0}, 422), ({"query": "Grace", "top_k": 51}, 422),
+    ({"query": "Grace", "use_llm_expansion": True}, 422),
+    ({"query": "Grace", "mode": "threshold"}, 422),
+])
+def test_invalid_or_removed_controls_are_rejected(client, payload, status):
+    with pytest.raises((ValidationError, HTTPException)) as error:
+        api.search_hymns(api.SearchRequest(**payload))
+    if isinstance(error.value, HTTPException):
+        assert error.value.status_code == status
+    else:
+        assert status == 422
+    assert not client.calls

@@ -1,123 +1,118 @@
 # ChoirNetwork
 
-ChoirNetwork recommends hymns from the 536-entry True Jesus Church English
-hymnal for a sermon title or Bible narrative. The same search index powers a
-FastAPI web interface and a command-line tool.
-
-## Retrieval pipeline
+Recommend hymns from the 536-entry True Jesus Church English hymnal using a
+sermon title. Python, Sentence Transformers/PyTorch, NumPy, and FastAPI power
+one local index and a small web interface.
 
 ```
-Query → [optional deterministic Bible grounding] → bi-encoder recall (top 50 chunks)
-      → cross-encoder rerank → ranked hymns
+Sermon title → MiniLM similarity over 3,469 title/stanza chunks
+             → best weighted chunk per hymn + lyric keyword boost
+             → top 50 hymns → cross-encoder reranking → recommendations
 ```
 
-Hymns are split into title and stanza chunks. Titles receive a 2.5× weight.
-`all-MiniLM-L6-v2` retrieves 50 candidates, and
-`ms-marco-MiniLM-L-6-v2` optionally reranks them. A small lexical boost can be
-applied when query terms occur in the lyrics.
+Embeddings are computed offline. A NumPy dot product is enough for this corpus;
+there is no vector database or model training. The bi-encoder is
+`all-MiniLM-L6-v2`; the cross-encoder is `ms-marco-MiniLM-L-6-v2`.
 
-Bible grounding is optional. It parses explicit references or searches
-five-verse windows from the World English Bible with BM25. Grounding depends
-only on the sermon title and Bible text.
+The cross-encoder was trained for web search, so the system falls back to dense
+retrieval when fewer than five reranked candidates pass its score cutoff. The UI
+shows rank order; model scores are not calibrated relevance probabilities.
 
-See [`docs/ENGINE.md`](docs/ENGINE.md) for pipeline diagrams and implementation details.
+## Run
 
-## Setup
+Use Python 3.10+ for a new environment, then install `requirements.txt`.
 
 ```bash
-conda activate choir_network
 pip install -r requirements.txt
+python -m choirnetwork build     # requires the reviewed data/raw/hymns.json
+python -m choirnetwork serve
+python -m choirnetwork search "Holy, Holy, Holy" --top-k 10
+python -m pytest tests/
 ```
 
-## Usage
+The API and CLI use the same default search configuration. Production search
+makes no LLM calls and does not read an OpenAI API key.
+
+## Corpus and ingestion
+
+The reviewed local corpus and index contain **536 hymns and 3,469 chunks**.
+Lyrics for 497 entries came from hymnal.tjc.org. The remaining 39 were
+reconstructed from positioned syllables in the English hymnbook PDF and are
+marked as unreviewed transcriptions. Titles and Bible-reference metadata were
+checked against the PDF. Those 39 transcriptions still need human proofreading.
+
+The copyrighted hymn corpus and PDF are excluded from Git. A fresh clone does
+not contain the complete benchmark corpus, and scraping alone cannot recreate
+its PDF corrections. To collect available website lyrics:
 
 ```bash
 python -m choirnetwork scrape
-python -m choirnetwork build
-python -m choirnetwork serve
-
-python -m choirnetwork search "Holy, Holy, Holy" --top-k 10
-python -m choirnetwork search "The crises of rebuilding (Ezra 4)" --bible-ground
-
-pytest tests/
+# Writes data/raw/scraped_hymns.json and data/raw/missing_lyrics.json.
+# Review and merge this staging data into your local corpus before building.
 ```
 
-## Corpus provenance
-
-The local `data/raw/hymns.json` contains all 536 numbered and lettered entries
-in the English hymnbook PDF. Titles and the `bible_verse` /
-`bible_reference` fields use the PDF as their source of truth.
-
-Lyrics for 497 entries come from hymnal.tjc.org. The remaining 39 were
-reconstructed from positioned syllable text in the sheet-music PDF and are
-marked with `lyrics_source = "Hymn_English.pdf positioned text layer
-(unreviewed)"`. Those transcriptions require human proofreading before they
-should be published or treated as character-perfect.
-
-The copyrighted hymn corpus and source PDF remain excluded from Git. The
-public-domain World English Bible verse corpus under `data/public/` is included
-so deterministic grounding can be reproduced.
+Scraping does not overwrite the reviewed corpus. Keep that corpus and its index
+together when reproducing results. Old single-vector indexes are no longer
+supported; rebuild with `build`.
 
 ## Evaluation
 
-The benchmark contains 106 sermon titles and the two hymns used in each
-historical service. It is split into 66 development queries and 40 held-out
-test queries.
+The dataset records two hymns chosen in each of **106 historical services**:
+66 development queries and 40 held-out test queries. These are observed positive
+examples, not an exhaustive list of relevant hymns. Passage interpretation,
+congregational familiarity, service order, and other considerations may influence
+selection. A different recommendation is not necessarily inappropriate.
 
-These are observed choices, not exhaustive relevance labels. The scores
-measure how often the system reproduces a historical selection from the sermon
-title alone; other recommendations may still be appropriate.
-
-The retrieval configuration was selected on the development split and then
-evaluated once on the held-out split:
-
-| Held-out configuration | Hit@5 | Recall@5 | MRR@5 | nDCG@5 |
-|---|---:|---:|---:|---:|
-| BM25 | 10.0% | 6.2% | 6.1% | 5.1% |
-| Frozen dense system | 15.0% | 8.8% | 8.5% | 7.2% |
-
-The frozen system improved nDCG@5 by 2.1 percentage points, or 41% relative to
-BM25. It uses title-only dense retrieval, a lyric-term boost, and cross-encoder
-reranking.
-
-Development results at `k=5`:
+The configuration was selected on development data before the September 7, 2026
+held-out run at commit `1ca1aff`:
 
 | Configuration | Hit@5 | Recall@5 | MRR@5 | nDCG@5 |
 |---|---:|---:|---:|---:|
-| BM25 | 13.6% | 6.8% | 7.8% | 5.7% |
-| Dense retrieval | 10.6% | 6.8% | 5.7% | 5.3% |
-| Dense + lyric boost | 12.1% | 7.6% | 6.8% | 6.0% |
-| Dense + boost + reranker | 13.6% | 8.3% | 6.4% | 6.1% |
-| Bible-grounded full system | 13.6% | 8.3% | 6.0% | 5.8% |
+| BM25 | 10.0% | 6.2% | 6.1% | 5.1% |
+| Dense + lyric boost + reranking/fallback | 15.0% | 8.8% | 8.5% | 7.2% |
 
-See [`eval/README.md`](eval/README.md) for the protocol and
-[`eval/results/`](eval/results/) for the full ablation reports.
+This is **40.7% relative improvement in nDCG@5**, rounded to 41%, or about
+2.1 percentage points. It is a small benchmark with incomplete judgments;
+statistical significance has not been established. The historical reports remain
+in `eval/results/`; the 41% claim refers to that frozen experiment.
 
-## Project structure
-
-```
-choirnetwork/
-  bible_grounding.py # Reference parsing, passage BM25, confidence abstention
-  engine.py          # Two-stage retrieval, chunked index, lyric theme boost
-  preprocess.py      # NLP preprocessing, stanza splitting
-  query_expand.py    # Curated + LLM-validated topic expansion
-  theme_boost.py     # Lyric keyword boost for sermon/Bible themes
-  bm25.py            # Lexical search baseline
-  lexical.py         # Shared BM25 scoring
-  scraper.py         # Web corpus ingest
-  api.py / cli.py    # FastAPI and command-line interfaces
-  static/            # Web frontend
-docs/
-  ENGINE.md          # Retrieval architecture and implementation details
-tests/               # pytest suite
+```bash
+python -m choirnetwork eval --split development
 ```
 
-## Optional query expansion
+New reports go to `eval/results/current/` and include per-query rankings and
+index/dataset checksums. Test evaluation requires `--split test
+--confirm-held-out`; do not use repeated test runs to choose configurations.
+See [the protocol](eval/README.md).
 
-The web app applies a curated topic map by default. The CLI enables it with
-`--expand`. `--llm-expand` can refine the query through OpenAI when an API key
-is configured; it is not part of the frozen evaluation configuration.
+## Context experiments
 
-## Contributors
+Additional sermon context may help distinguish ambiguous titles. The current
+benchmark is too small and its labels too incomplete to settle that question.
+LLM expansion remains available as a separate, opt-in experiment:
 
-Bethany Liu, Mark Chen
+```bash
+cp .env.example .env  # add your OPENAI_API_KEY
+python -m experiments.llm_search "King Joash" --context "Repairing the temple"
+```
+
+This sends the supplied title and context to OpenAI, prints the expanded query,
+and uses it for dense recall. Reranking still uses the original title to isolate
+the expansion experiment. It does not run in the web app or the benchmark and
+is not covered by the 41% claim. See [experiments](experiments/README.md) for
+limitations and the retained Bible-grounding experiment.
+
+## Code map
+
+- `choirnetwork/engine.py`: index I/O, embedding, retrieval, reranking
+- `choirnetwork/preprocess.py`: text cleanup and title/stanza chunks
+- `choirnetwork/theme_boost.py`: small lyric keyword heuristic
+- `choirnetwork/bm25.py`, `lexical.py`: baseline and shared BM25 scorer
+- `choirnetwork/scraper.py`: website ingestion and corpus records
+- `choirnetwork/eval.py`: labels, metrics, ablations, reports
+- `choirnetwork/api.py`, `cli.py`, `static/`: thin interfaces
+- `experiments/`: optional context research, outside the production pipeline
+
+[Engine details](docs/ENGINE.md) explain the ranking policy and tradeoffs.
+
+Contributors: Bethany Liu, Mark Chen

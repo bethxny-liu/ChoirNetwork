@@ -1,0 +1,4304 @@
+{
+  "split": "development",
+  "k": 5,
+  "candidate_k": 50,
+  "model": "sentence-transformers/all-MiniLM-L6-v2",
+  "reranker": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+  "device": "cpu",
+  "title_weight": 2.5,
+  "natural_index_build_seconds": 43.503741625,
+  "sha256": {
+    "data/raw/hymns.json": "de655abbde65df843eb3e20a04913b156317de3b260cb007aa737d30d93c7bee",
+    "eval/datasets/service_hymns.csv": "af0572800ed01f2dd66c30e1ca30eea9c535a86b7d74e36fea1a9b78ec9d415c",
+    "data/index/metadata.json": "26204d17170f044297a098b4137dcf7996b6a145ed4511e856dc88376ffa0dea",
+    "data/index/chunk_embeddings.npy": "536a4fba2adda535ab57e7588b2b25fccbb60d2ca241903e5831de597abd31e8",
+    "data/index/chunk_hymn_indices.npy": "1a9487204f3bf36908e86b3d697d480c595c830e8951be2f767843187f6dc8f6",
+    "data/index/chunk_weights.npy": "e58765d89bec043ffa5ebd5e8c63631396cd6afc2e55b2afbc95d4ab4803f41d"
+  },
+  "results": [
+    {
+      "name": "baseline",
+      "metrics": {
+        "queries_evaluated": 66,
+        "hit_rate": 0.13636363636363635,
+        "recall": 0.08333333333333333,
+        "mrr": 0.06414141414141414,
+        "ndcg": 0.060644419252784465
+      },
+      "candidate_recall": 0.25,
+      "warm_search_ms_p50": 850.4366039999951,
+      "warm_search_ms_p95": 1514.3430110000047,
+      "queries": [
+        {
+          "query": "A Day of Good News",
+          "observed": [
+            "276",
+            "277"
+          ],
+          "top_5": [
+            "383",
+            "351",
+            "521",
+            "87",
+            "408"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 438.20529199999925
+        },
+        {
+          "query": "Return and Revive",
+          "observed": [
+            "45",
+            "99"
+          ],
+          "top_5": [
+            "248",
+            "84",
+            "318",
+            "435",
+            "309"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 462.76041600000184
+        },
+        {
+          "query": "The Crises of Rebuilding the Temple (Ezra 4)",
+          "observed": [
+            "175",
+            "176"
+          ],
+          "top_5": [
+            "80",
+            "459",
+            "418",
+            "279",
+            "44"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 880.5962499999964
+        },
+        {
+          "query": "Who Returned to Jerusalem?",
+          "observed": [
+            "242",
+            "359"
+          ],
+          "top_5": [
+            "477",
+            "524",
+            "159",
+            "359",
+            "75"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 844.6236670000005
+        },
+        {
+          "query": "\"I am coming soon!\", said the Lord",
+          "observed": [
+            "84",
+            "85"
+          ],
+          "top_5": [
+            "307",
+            "85",
+            "129a",
+            "116",
+            "512"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 683.7914589999982
+        },
+        {
+          "query": "Be Rich Toward God",
+          "observed": [
+            "233",
+            "452"
+          ],
+          "top_5": [
+            "332",
+            "442",
+            "53",
+            "28",
+            "3"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 495.5589580000037
+        },
+        {
+          "query": "The King with a Tender Heart Revived the Kingdom",
+          "observed": [
+            "224",
+            "262"
+          ],
+          "top_5": [
+            "448",
+            "311",
+            "374",
+            "425",
+            "4"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1062.2540000000029
+        },
+        {
+          "query": "Shall Two Walk Together, Except They Have Agreed?",
+          "observed": [
+            "364",
+            "5"
+          ],
+          "top_5": [
+            "428",
+            "390",
+            "127",
+            "107",
+            "413"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1089.0890000000013
+        },
+        {
+          "query": "The Valley of Berachah",
+          "observed": [
+            "172",
+            "224"
+          ],
+          "top_5": [
+            "83",
+            "137",
+            "189",
+            "196",
+            "440"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1034.8184580000038
+        },
+        {
+          "query": "King Joash",
+          "observed": [
+            "224",
+            "262"
+          ],
+          "top_5": [
+            "316",
+            "448",
+            "453",
+            "424",
+            "425"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 642.8522500000042
+        },
+        {
+          "query": "The Home of Samuel",
+          "observed": [
+            "424",
+            "425"
+          ],
+          "top_5": [
+            "300",
+            "307",
+            "186",
+            "134",
+            "199"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 705.4917079999967
+        },
+        {
+          "query": "The Home of Rebekah",
+          "observed": [
+            "377",
+            "378"
+          ],
+          "top_5": [
+            "448",
+            "186",
+            "134",
+            "307",
+            "300"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 708.8215830000024
+        },
+        {
+          "query": "The Home of Abraham",
+          "observed": [
+            "120",
+            "5"
+          ],
+          "top_5": [
+            "3",
+            "300",
+            "186",
+            "417",
+            "307"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 501.4246249999985
+        },
+        {
+          "query": "The Home of Noah",
+          "observed": [
+            "165",
+            "344"
+          ],
+          "top_5": [
+            "300",
+            "307",
+            "186",
+            "134",
+            "417"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 648.1014579999993
+        },
+        {
+          "query": "The Home of Moses",
+          "observed": [
+            "496",
+            "497"
+          ],
+          "top_5": [
+            "186",
+            "300",
+            "307",
+            "417",
+            "134"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 426.14345800000564
+        },
+        {
+          "query": "The Home of Peter",
+          "observed": [
+            "442",
+            "89"
+          ],
+          "top_5": [
+            "307",
+            "300",
+            "186",
+            "134",
+            "417"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 429.98024999999984
+        },
+        {
+          "query": "A Joyful Life",
+          "observed": [
+            "339",
+            "376"
+          ],
+          "top_5": [
+            "7",
+            "24",
+            "130a",
+            "250",
+            "350"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 724.1166250000006
+        },
+        {
+          "query": "Knowing that the testing of your faith produces endurance",
+          "observed": [
+            "515",
+            "516"
+          ],
+          "top_5": [
+            "138",
+            "356",
+            "211",
+            "464",
+            "484"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 735.7476250000019
+        },
+        {
+          "query": "Identity in Christ",
+          "observed": [
+            "126",
+            "425"
+          ],
+          "top_5": [
+            "358",
+            "116",
+            "398",
+            "233",
+            "132a"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 492.09587499998975
+        },
+        {
+          "query": "Solomon's Prayer at the Temple Dedication",
+          "observed": [
+            "406",
+            "415"
+          ],
+          "top_5": [
+            "411",
+            "82",
+            "412",
+            "259",
+            "129"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1129.5054170000044
+        },
+        {
+          "query": "Who is the Greatest",
+          "observed": [
+            "350",
+            "369"
+          ],
+          "top_5": [
+            "514",
+            "457",
+            "426",
+            "348",
+            "482"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 848.7380419999937
+        },
+        {
+          "query": "Orderly Worshiping",
+          "observed": [
+            "412",
+            "503"
+          ],
+          "top_5": [
+            "312",
+            "316",
+            "418",
+            "129",
+            "117"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 678.4635420000029
+        },
+        {
+          "query": "Let the Lord Jesus Reign in Our Lives",
+          "observed": [
+            "157",
+            "358"
+          ],
+          "top_5": [
+            "222",
+            "471",
+            "492",
+            "170",
+            "215"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 983.4277090000114
+        },
+        {
+          "query": "Excel Even More",
+          "observed": [
+            "18",
+            "401"
+          ],
+          "top_5": [
+            "27",
+            "470",
+            "109",
+            "145",
+            "148"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 659.0635830000053
+        },
+        {
+          "query": "Your Sins Have Been Forgiven",
+          "observed": [
+            "236",
+            "237"
+          ],
+          "top_5": [
+            "37",
+            "32",
+            "445",
+            "206",
+            "157"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 631.7016249999909
+        },
+        {
+          "query": "The Letter to the Church in Smyrna",
+          "observed": [
+            "203",
+            "204"
+          ],
+          "top_5": [
+            "171",
+            "174",
+            "289",
+            "131a",
+            "247"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 997.3952080000004
+        },
+        {
+          "query": "Rejoicing in Hope",
+          "observed": [
+            "11",
+            "240"
+          ],
+          "top_5": [
+            "299",
+            "463",
+            "84",
+            "11",
+            "448"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 750.0071249999962
+        },
+        {
+          "query": "Do Not Give the Devil a Foothold",
+          "observed": [
+            "176",
+            "177"
+          ],
+          "top_5": [
+            "86",
+            "169",
+            "352",
+            "331",
+            "107"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1074.201875
+        },
+        {
+          "query": "What Do You Ask?",
+          "observed": [
+            "146",
+            "378"
+          ],
+          "top_5": [
+            "481",
+            "31",
+            "164",
+            "478",
+            "523"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1059.6482499999952
+        },
+        {
+          "query": "The Benjamites Who Helped David",
+          "observed": [
+            "233",
+            "416"
+          ],
+          "top_5": [
+            "223",
+            "58",
+            "287",
+            "278",
+            "469"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 754.5926669999972
+        },
+        {
+          "query": "Do two walk together unless they have agreed to meet?",
+          "observed": [
+            "156",
+            "403"
+          ],
+          "top_5": [
+            "413",
+            "390",
+            "127",
+            "428",
+            "123"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1859.8993330000012
+        },
+        {
+          "query": "Then he believed in the Lord, and He credited it to him as righteousness",
+          "observed": [
+            "226",
+            "376"
+          ],
+          "top_5": [
+            "377",
+            "230",
+            "296a",
+            "32",
+            "473"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 2391.2129590000004
+        },
+        {
+          "query": "Put on the Helmet of Salvation",
+          "observed": [
+            "170",
+            "436"
+          ],
+          "top_5": [
+            "380",
+            "356",
+            "121",
+            "365",
+            "18"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1235.152499999998
+        },
+        {
+          "query": "Turning Our Lives Around: From Pain to Honour",
+          "observed": [
+            "336",
+            "367"
+          ],
+          "top_5": [
+            "481",
+            "478",
+            "476",
+            "201",
+            "264"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1289.3580419999894
+        },
+        {
+          "query": "Carry the ark of God back into the city!",
+          "observed": [
+            "382",
+            "501"
+          ],
+          "top_5": [
+            "154",
+            "105",
+            "498",
+            "311",
+            "115"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1014.6617500000019
+        },
+        {
+          "query": "Hezekiah, Who did What Was Right in the Sight of the Lord",
+          "observed": [
+            "224",
+            "347"
+          ],
+          "top_5": [
+            "448",
+            "46",
+            "115",
+            "315",
+            "152"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1640.5367079999992
+        },
+        {
+          "query": "Such Great Faith",
+          "observed": [
+            "136",
+            "208"
+          ],
+          "top_5": [
+            "484",
+            "356",
+            "138",
+            "211",
+            "464"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 852.1351659999965
+        },
+        {
+          "query": "What is the Reason for the Hope in You?",
+          "observed": [
+            "130",
+            "163"
+          ],
+          "top_5": [
+            "36",
+            "82",
+            "481",
+            "144",
+            "394"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 712.5779590000008
+        },
+        {
+          "query": "Put on the preparation of the gospel",
+          "observed": [
+            "269",
+            "270"
+          ],
+          "top_5": [
+            "276",
+            "286",
+            "125",
+            "380",
+            "117"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 902.9139999999956
+        },
+        {
+          "query": "Fifteen Extra Years",
+          "observed": [
+            "118",
+            "135"
+          ],
+          "top_5": [
+            "309",
+            "490",
+            "497",
+            "283",
+            "51a"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 774.2409589999966
+        },
+        {
+          "query": "Joyful Meeting",
+          "observed": [
+            "225",
+            "68"
+          ],
+          "top_5": [
+            "7",
+            "130a",
+            "250",
+            "35",
+            "413"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 971.8377079999954
+        },
+        {
+          "query": "Love is not Jealous",
+          "observed": [
+            "129",
+            "479"
+          ],
+          "top_5": [
+            "431",
+            "53",
+            "479",
+            "332",
+            "218"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 888.3573749999982
+        },
+        {
+          "query": "Elisha Became Sick",
+          "observed": [
+            "377",
+            "380"
+          ],
+          "top_5": [
+            "139",
+            "510",
+            "334",
+            "118",
+            "297"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 761.1980840000001
+        },
+        {
+          "query": "Spiritual Significance of Laying of Hands",
+          "observed": [
+            "494",
+            "504"
+          ],
+          "top_5": [
+            "346",
+            "34",
+            "515",
+            "432",
+            "68"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 985.7974580000075
+        },
+        {
+          "query": "Peace Which Surpasses All Comprehension",
+          "observed": [
+            "333",
+            "433"
+          ],
+          "top_5": [
+            "433",
+            "159",
+            "330",
+            "500",
+            "36"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1112.7305839999906
+        },
+        {
+          "query": "My Spirit Rejoices in God",
+          "observed": [
+            "162",
+            "163"
+          ],
+          "top_5": [
+            "331",
+            "252",
+            "11",
+            "84",
+            "448"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 661.324417000003
+        },
+        {
+          "query": "The Axe Head Floated",
+          "observed": [
+            "347",
+            "351"
+          ],
+          "top_5": [
+            "121",
+            "365",
+            "76",
+            "418",
+            "422"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 912.3323339999985
+        },
+        {
+          "query": "Heal the Water at Jericho",
+          "observed": [
+            "129",
+            "513"
+          ],
+          "top_5": [
+            "213",
+            "42",
+            "46",
+            "285",
+            "513"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 633.3247499999999
+        },
+        {
+          "query": "I Have Learned the Secret",
+          "observed": [
+            "486",
+            "514"
+          ],
+          "top_5": [
+            "354",
+            "455",
+            "166",
+            "17",
+            "280"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 577.7697920000122
+        },
+        {
+          "query": "Rejoice in the Lord Always",
+          "observed": [
+            "448",
+            "84"
+          ],
+          "top_5": [
+            "448",
+            "84",
+            "11",
+            "463",
+            "299"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 923.497832999999
+        },
+        {
+          "query": "The Summit of Pisgah",
+          "observed": [
+            "154",
+            "259"
+          ],
+          "top_5": [
+            "81",
+            "465",
+            "359",
+            "274b",
+            "368"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 1099.057249999987
+        },
+        {
+          "query": "You shall not put the Lord your God to the test",
+          "observed": [
+            "145",
+            "378"
+          ],
+          "top_5": [
+            "152",
+            "332",
+            "151",
+            "496",
+            "194"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1564.5264590000068
+        },
+        {
+          "query": "The Ravens Beside the Brook Cherith",
+          "observed": [
+            "287",
+            "392"
+          ],
+          "top_5": [
+            "388",
+            "63",
+            "48",
+            "440",
+            "286"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 925.6089580000122
+        },
+        {
+          "query": "Elijah prayed for the Rain",
+          "observed": [
+            "259",
+            "406"
+          ],
+          "top_5": [
+            "525",
+            "411",
+            "82",
+            "495",
+            "2"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1150.2816670000016
+        },
+        {
+          "query": "It is More Blessed to Give than to Receive",
+          "observed": [
+            "287",
+            "415"
+          ],
+          "top_5": [
+            "446",
+            "324",
+            "412",
+            "494",
+            "404"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 906.6506249999975
+        },
+        {
+          "query": "Receiving Peace in Jesus Christ",
+          "observed": [
+            "330",
+            "433"
+          ],
+          "top_5": [
+            "159",
+            "330",
+            "433",
+            "116",
+            "11"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 506.98595800000135
+        },
+        {
+          "query": "A Church of Greater Nobility",
+          "observed": [
+            "164",
+            "364"
+          ],
+          "top_5": [
+            "174",
+            "171",
+            "289",
+            "316",
+            "131a"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 665.339000000003
+        },
+        {
+          "query": "And tongues like fire appeared to them, distributing themselves, and rested on each one of them",
+          "observed": [
+            "247",
+            "252"
+          ],
+          "top_5": [
+            "205",
+            "138",
+            "68",
+            "249",
+            "217"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 886.25979199999
+        },
+        {
+          "query": "Succession in the Family",
+          "observed": [
+            "101",
+            "3"
+          ],
+          "top_5": [
+            "453",
+            "329",
+            "464",
+            "5",
+            "425"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 714.6492920000043
+        },
+        {
+          "query": "From Paul to Timothy",
+          "observed": [
+            "379",
+            "380"
+          ],
+          "top_5": [
+            "32",
+            "399",
+            "148",
+            "139",
+            "329"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1103.991665999999
+        },
+        {
+          "query": "Great Wisdom Saved a Small City",
+          "observed": [
+            "144",
+            "26"
+          ],
+          "top_5": [
+            "206",
+            "25",
+            "276",
+            "90",
+            "433"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 945.2047090000093
+        },
+        {
+          "query": "There is a Man Greater Than Jonah",
+          "observed": [
+            "101",
+            "99"
+          ],
+          "top_5": [
+            "445",
+            "139",
+            "154",
+            "347",
+            "471"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 767.3071669999985
+        },
+        {
+          "query": "Jesus, Our Lord and King",
+          "observed": [
+            "361",
+            "84"
+          ],
+          "top_5": [
+            "240",
+            "448",
+            "311",
+            "21",
+            "148"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 816.3498340000075
+        },
+        {
+          "query": "Lord Jesus' Commission - Preach the Gospel",
+          "observed": [
+            "286",
+            "427"
+          ],
+          "top_5": [
+            "276",
+            "287",
+            "269",
+            "38",
+            "286"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1363.7926669999983
+        },
+        {
+          "query": "Be Joyful in the Hope",
+          "observed": [
+            "203",
+            "204"
+          ],
+          "top_5": [
+            "7",
+            "250",
+            "35",
+            "130a",
+            "404"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 764.0471250000047
+        },
+        {
+          "query": "Do not Leave the Devil a Foothold",
+          "observed": [
+            "167",
+            "168"
+          ],
+          "top_5": [
+            "352",
+            "331",
+            "169",
+            "382",
+            "319"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1007.9498329999979
+        }
+      ]
+    },
+    {
+      "name": "natural_text",
+      "metrics": {
+        "queries_evaluated": 66,
+        "hit_rate": 0.16666666666666666,
+        "recall": 0.09848484848484848,
+        "mrr": 0.07626262626262625,
+        "ndcg": 0.07034165565534133
+      },
+      "candidate_recall": 0.26515151515151514,
+      "warm_search_ms_p50": 798.2440204999932,
+      "warm_search_ms_p95": 1181.1623227499979,
+      "queries": [
+        {
+          "query": "A Day of Good News",
+          "observed": [
+            "276",
+            "277"
+          ],
+          "top_5": [
+            "521",
+            "87",
+            "351",
+            "88",
+            "128"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1057.4848330000036
+        },
+        {
+          "query": "Return and Revive",
+          "observed": [
+            "45",
+            "99"
+          ],
+          "top_5": [
+            "248",
+            "463",
+            "84",
+            "318",
+            "299"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 800.4087909999953
+        },
+        {
+          "query": "The Crises of Rebuilding the Temple (Ezra 4)",
+          "observed": [
+            "175",
+            "176"
+          ],
+          "top_5": [
+            "482",
+            "33",
+            "328",
+            "171",
+            "319"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 992.5482910000056
+        },
+        {
+          "query": "Who Returned to Jerusalem?",
+          "observed": [
+            "242",
+            "359"
+          ],
+          "top_5": [
+            "477",
+            "195",
+            "338",
+            "130",
+            "524"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 829.2198329999962
+        },
+        {
+          "query": "\"I am coming soon!\", said the Lord",
+          "observed": [
+            "84",
+            "85"
+          ],
+          "top_5": [
+            "307",
+            "85",
+            "129a",
+            "116",
+            "512"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 1040.5904170000042
+        },
+        {
+          "query": "Be Rich Toward God",
+          "observed": [
+            "233",
+            "452"
+          ],
+          "top_5": [
+            "442",
+            "53",
+            "332",
+            "495",
+            "328"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 766.3676250000009
+        },
+        {
+          "query": "The King with a Tender Heart Revived the Kingdom",
+          "observed": [
+            "224",
+            "262"
+          ],
+          "top_5": [
+            "448",
+            "311",
+            "316",
+            "425",
+            "453"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 834.1397500000056
+        },
+        {
+          "query": "Shall Two Walk Together, Except They Have Agreed?",
+          "observed": [
+            "364",
+            "5"
+          ],
+          "top_5": [
+            "428",
+            "390",
+            "127",
+            "430",
+            "107"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 966.7213750000201
+        },
+        {
+          "query": "The Valley of Berachah",
+          "observed": [
+            "172",
+            "224"
+          ],
+          "top_5": [
+            "189",
+            "137",
+            "196",
+            "83",
+            "270"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 711.0832080000193
+        },
+        {
+          "query": "King Joash",
+          "observed": [
+            "224",
+            "262"
+          ],
+          "top_5": [
+            "316",
+            "453",
+            "424",
+            "425",
+            "512"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1053.0646250000189
+        },
+        {
+          "query": "The Home of Samuel",
+          "observed": [
+            "424",
+            "425"
+          ],
+          "top_5": [
+            "134",
+            "424",
+            "199",
+            "195",
+            "97"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 724.2102079999881
+        },
+        {
+          "query": "The Home of Rebekah",
+          "observed": [
+            "377",
+            "378"
+          ],
+          "top_5": [
+            "189",
+            "448",
+            "134",
+            "186",
+            "196"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 857.7540410000211
+        },
+        {
+          "query": "The Home of Abraham",
+          "observed": [
+            "120",
+            "5"
+          ],
+          "top_5": [
+            "3",
+            "186",
+            "417",
+            "134",
+            "199"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1136.9119579999847
+        },
+        {
+          "query": "The Home of Noah",
+          "observed": [
+            "165",
+            "344"
+          ],
+          "top_5": [
+            "134",
+            "199",
+            "186",
+            "417",
+            "97"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 871.4101250000112
+        },
+        {
+          "query": "The Home of Moses",
+          "observed": [
+            "496",
+            "497"
+          ],
+          "top_5": [
+            "195",
+            "186",
+            "417",
+            "115",
+            "134"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 802.455665999986
+        },
+        {
+          "query": "The Home of Peter",
+          "observed": [
+            "442",
+            "89"
+          ],
+          "top_5": [
+            "195",
+            "186",
+            "417",
+            "199",
+            "307"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 639.0368330000058
+        },
+        {
+          "query": "A Joyful Life",
+          "observed": [
+            "339",
+            "376"
+          ],
+          "top_5": [
+            "7",
+            "130a",
+            "24",
+            "322",
+            "398"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 841.2151250000193
+        },
+        {
+          "query": "Knowing that the testing of your faith produces endurance",
+          "observed": [
+            "515",
+            "516"
+          ],
+          "top_5": [
+            "138",
+            "356",
+            "484",
+            "211",
+            "464"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 836.8004170000063
+        },
+        {
+          "query": "Identity in Christ",
+          "observed": [
+            "126",
+            "425"
+          ],
+          "top_5": [
+            "358",
+            "327",
+            "79",
+            "338",
+            "233"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 542.6413749999881
+        },
+        {
+          "query": "Solomon's Prayer at the Temple Dedication",
+          "observed": [
+            "406",
+            "415"
+          ],
+          "top_5": [
+            "411",
+            "525",
+            "328",
+            "412",
+            "259"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1002.6931670000181
+        },
+        {
+          "query": "Who is the Greatest",
+          "observed": [
+            "350",
+            "369"
+          ],
+          "top_5": [
+            "72",
+            "329",
+            "348",
+            "339",
+            "325"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 876.385708000015
+        },
+        {
+          "query": "Orderly Worshiping",
+          "observed": [
+            "412",
+            "503"
+          ],
+          "top_5": [
+            "316",
+            "312",
+            "129",
+            "328",
+            "525"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 846.7996250000169
+        },
+        {
+          "query": "Let the Lord Jesus Reign in Our Lives",
+          "observed": [
+            "157",
+            "358"
+          ],
+          "top_5": [
+            "341",
+            "492",
+            "471",
+            "231",
+            "170"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 693.2510419999858
+        },
+        {
+          "query": "Excel Even More",
+          "observed": [
+            "18",
+            "401"
+          ],
+          "top_5": [
+            "218",
+            "27",
+            "470",
+            "351",
+            "99"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1227.7527090000149
+        },
+        {
+          "query": "Your Sins Have Been Forgiven",
+          "observed": [
+            "236",
+            "237"
+          ],
+          "top_5": [
+            "37",
+            "32",
+            "214",
+            "237",
+            "445"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 986.0415839999916
+        },
+        {
+          "query": "The Letter to the Church in Smyrna",
+          "observed": [
+            "203",
+            "204"
+          ],
+          "top_5": [
+            "174",
+            "171",
+            "289",
+            "411",
+            "131a"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1445.4069580000066
+        },
+        {
+          "query": "Rejoicing in Hope",
+          "observed": [
+            "11",
+            "240"
+          ],
+          "top_5": [
+            "299",
+            "463",
+            "84",
+            "11",
+            "448"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 855.8859999999981
+        },
+        {
+          "query": "Do Not Give the Devil a Foothold",
+          "observed": [
+            "176",
+            "177"
+          ],
+          "top_5": [
+            "331",
+            "32",
+            "86",
+            "40",
+            "352"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 740.9462910000002
+        },
+        {
+          "query": "What Do You Ask?",
+          "observed": [
+            "146",
+            "378"
+          ],
+          "top_5": [
+            "481",
+            "31",
+            "185",
+            "152",
+            "151"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 694.5351249999874
+        },
+        {
+          "query": "The Benjamites Who Helped David",
+          "observed": [
+            "233",
+            "416"
+          ],
+          "top_5": [
+            "223",
+            "168",
+            "230",
+            "287",
+            "114"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 589.4642499999918
+        },
+        {
+          "query": "Do two walk together unless they have agreed to meet?",
+          "observed": [
+            "156",
+            "403"
+          ],
+          "top_5": [
+            "413",
+            "428",
+            "390",
+            "123",
+            "107"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1387.6192079999896
+        },
+        {
+          "query": "Then he believed in the Lord, and He credited it to him as righteousness",
+          "observed": [
+            "226",
+            "376"
+          ],
+          "top_5": [
+            "230",
+            "477",
+            "338",
+            "423",
+            "3"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1184.1115830000035
+        },
+        {
+          "query": "Put on the Helmet of Salvation",
+          "observed": [
+            "170",
+            "436"
+          ],
+          "top_5": [
+            "380",
+            "379",
+            "170",
+            "138",
+            "356"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 994.9680830000034
+        },
+        {
+          "query": "Turning Our Lives Around: From Pain to Honour",
+          "observed": [
+            "336",
+            "367"
+          ],
+          "top_5": [
+            "209",
+            "183",
+            "240",
+            "306",
+            "28"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1136.961499999984
+        },
+        {
+          "query": "Carry the ark of God back into the city!",
+          "observed": [
+            "382",
+            "501"
+          ],
+          "top_5": [
+            "359",
+            "154",
+            "195",
+            "127",
+            "498"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 796.0792499999911
+        },
+        {
+          "query": "Hezekiah, Who did What Was Right in the Sight of the Lord",
+          "observed": [
+            "224",
+            "347"
+          ],
+          "top_5": [
+            "195",
+            "290",
+            "46",
+            "269",
+            "152"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 699.3206249999844
+        },
+        {
+          "query": "Such Great Faith",
+          "observed": [
+            "136",
+            "208"
+          ],
+          "top_5": [
+            "138",
+            "484",
+            "211",
+            "356",
+            "473"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 700.3413749999936
+        },
+        {
+          "query": "What is the Reason for the Hope in You?",
+          "observed": [
+            "130",
+            "163"
+          ],
+          "top_5": [
+            "36",
+            "237",
+            "100",
+            "332",
+            "82"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1162.8702499999974
+        },
+        {
+          "query": "Put on the preparation of the gospel",
+          "observed": [
+            "269",
+            "270"
+          ],
+          "top_5": [
+            "276",
+            "286",
+            "170",
+            "125",
+            "380"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 937.7174999999909
+        },
+        {
+          "query": "Fifteen Extra Years",
+          "observed": [
+            "118",
+            "135"
+          ],
+          "top_5": [
+            "309",
+            "493",
+            "490",
+            "371",
+            "497"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 769.6141250000039
+        },
+        {
+          "query": "Joyful Meeting",
+          "observed": [
+            "225",
+            "68"
+          ],
+          "top_5": [
+            "7",
+            "130a",
+            "35",
+            "250",
+            "413"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 872.3223749999818
+        },
+        {
+          "query": "Love is not Jealous",
+          "observed": [
+            "129",
+            "479"
+          ],
+          "top_5": [
+            "53",
+            "431",
+            "479",
+            "91",
+            "27"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 633.8236670000015
+        },
+        {
+          "query": "Elisha Became Sick",
+          "observed": [
+            "377",
+            "380"
+          ],
+          "top_5": [
+            "334",
+            "510",
+            "477",
+            "139",
+            "33"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 642.4015000000054
+        },
+        {
+          "query": "Spiritual Significance of Laying of Hands",
+          "observed": [
+            "494",
+            "504"
+          ],
+          "top_5": [
+            "346",
+            "488",
+            "432",
+            "34",
+            "295"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 590.1312080000025
+        },
+        {
+          "query": "Peace Which Surpasses All Comprehension",
+          "observed": [
+            "333",
+            "433"
+          ],
+          "top_5": [
+            "433",
+            "159",
+            "330",
+            "476",
+            "36"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 580.8818330000065
+        },
+        {
+          "query": "My Spirit Rejoices in God",
+          "observed": [
+            "162",
+            "163"
+          ],
+          "top_5": [
+            "331",
+            "11",
+            "28",
+            "236",
+            "448"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 900.5433330000017
+        },
+        {
+          "query": "The Axe Head Floated",
+          "observed": [
+            "347",
+            "351"
+          ],
+          "top_5": [
+            "365",
+            "121",
+            "76",
+            "422",
+            "173"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1079.9869580000063
+        },
+        {
+          "query": "Heal the Water at Jericho",
+          "observed": [
+            "129",
+            "513"
+          ],
+          "top_5": [
+            "213",
+            "46",
+            "482",
+            "42",
+            "513"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 855.3809160000014
+        },
+        {
+          "query": "I Have Learned the Secret",
+          "observed": [
+            "486",
+            "514"
+          ],
+          "top_5": [
+            "280",
+            "406",
+            "386",
+            "17",
+            "136"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 596.6072919999874
+        },
+        {
+          "query": "Rejoice in the Lord Always",
+          "observed": [
+            "448",
+            "84"
+          ],
+          "top_5": [
+            "448",
+            "84",
+            "11",
+            "463",
+            "299"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 1172.314541999981
+        },
+        {
+          "query": "The Summit of Pisgah",
+          "observed": [
+            "154",
+            "259"
+          ],
+          "top_5": [
+            "81",
+            "274b",
+            "359",
+            "195",
+            "465"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 736.5342080000232
+        },
+        {
+          "query": "You shall not put the Lord your God to the test",
+          "observed": [
+            "145",
+            "378"
+          ],
+          "top_5": [
+            "152",
+            "231",
+            "296a",
+            "496",
+            "211"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 760.6620419999786
+        },
+        {
+          "query": "The Ravens Beside the Brook Cherith",
+          "observed": [
+            "287",
+            "392"
+          ],
+          "top_5": [
+            "388",
+            "485",
+            "286",
+            "273",
+            "48"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 513.2822500000032
+        },
+        {
+          "query": "Elijah prayed for the Rain",
+          "observed": [
+            "259",
+            "406"
+          ],
+          "top_5": [
+            "525",
+            "411",
+            "257",
+            "256",
+            "328"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 492.3759589999861
+        },
+        {
+          "query": "It is More Blessed to Give than to Receive",
+          "observed": [
+            "287",
+            "415"
+          ],
+          "top_5": [
+            "446",
+            "412",
+            "324",
+            "102",
+            "289"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 631.1604580000107
+        },
+        {
+          "query": "Receiving Peace in Jesus Christ",
+          "observed": [
+            "330",
+            "433"
+          ],
+          "top_5": [
+            "159",
+            "32",
+            "433",
+            "330",
+            "165"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 610.069167000006
+        },
+        {
+          "query": "A Church of Greater Nobility",
+          "observed": [
+            "164",
+            "364"
+          ],
+          "top_5": [
+            "174",
+            "171",
+            "131a",
+            "316",
+            "289"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 540.8856660000083
+        },
+        {
+          "query": "And tongues like fire appeared to them, distributing themselves, and rested on each one of them",
+          "observed": [
+            "247",
+            "252"
+          ],
+          "top_5": [
+            "249",
+            "205",
+            "168",
+            "311",
+            "217"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 968.4010420000106
+        },
+        {
+          "query": "Succession in the Family",
+          "observed": [
+            "101",
+            "3"
+          ],
+          "top_5": [
+            "453",
+            "329",
+            "5",
+            "94",
+            "464"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 478.83333400000083
+        },
+        {
+          "query": "From Paul to Timothy",
+          "observed": [
+            "379",
+            "380"
+          ],
+          "top_5": [
+            "139",
+            "32",
+            "338",
+            "366",
+            "269"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 468.24629200000345
+        },
+        {
+          "query": "Great Wisdom Saved a Small City",
+          "observed": [
+            "144",
+            "26"
+          ],
+          "top_5": [
+            "90",
+            "276",
+            "496",
+            "25",
+            "206"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 444.7080839999842
+        },
+        {
+          "query": "There is a Man Greater Than Jonah",
+          "observed": [
+            "101",
+            "99"
+          ],
+          "top_5": [
+            "445",
+            "327",
+            "139",
+            "274a",
+            "347"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 619.6199580000155
+        },
+        {
+          "query": "Jesus, Our Lord and King",
+          "observed": [
+            "361",
+            "84"
+          ],
+          "top_5": [
+            "240",
+            "448",
+            "311",
+            "148",
+            "79"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 563.9518330000044
+        },
+        {
+          "query": "Lord Jesus' Commission - Preach the Gospel",
+          "observed": [
+            "286",
+            "427"
+          ],
+          "top_5": [
+            "276",
+            "287",
+            "286",
+            "139",
+            "482"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 599.7937500000035
+        },
+        {
+          "query": "Be Joyful in the Hope",
+          "observed": [
+            "203",
+            "204"
+          ],
+          "top_5": [
+            "7",
+            "130a",
+            "382",
+            "250",
+            "36"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 568.2212499999935
+        },
+        {
+          "query": "Do not Leave the Devil a Foothold",
+          "observed": [
+            "167",
+            "168"
+          ],
+          "top_5": [
+            "331",
+            "32",
+            "352",
+            "484",
+            "169"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 530.3826660000084
+        }
+      ]
+    },
+    {
+      "name": "title_plus_stanza",
+      "metrics": {
+        "queries_evaluated": 66,
+        "hit_rate": 0.15151515151515152,
+        "recall": 0.08333333333333333,
+        "mrr": 0.073989898989899,
+        "ndcg": 0.06075447088084868
+      },
+      "candidate_recall": 0.25,
+      "warm_search_ms_p50": 954.0754580000055,
+      "warm_search_ms_p95": 1512.755603499997,
+      "queries": [
+        {
+          "query": "A Day of Good News",
+          "observed": [
+            "276",
+            "277"
+          ],
+          "top_5": [
+            "383",
+            "351",
+            "521",
+            "87",
+            "408"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1259.3569999999943
+        },
+        {
+          "query": "Return and Revive",
+          "observed": [
+            "45",
+            "99"
+          ],
+          "top_5": [
+            "248",
+            "84",
+            "318",
+            "435",
+            "309"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1306.6177080000045
+        },
+        {
+          "query": "The Crises of Rebuilding the Temple (Ezra 4)",
+          "observed": [
+            "175",
+            "176"
+          ],
+          "top_5": [
+            "80",
+            "459",
+            "418",
+            "279",
+            "44"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1787.3435830000233
+        },
+        {
+          "query": "Who Returned to Jerusalem?",
+          "observed": [
+            "242",
+            "359"
+          ],
+          "top_5": [
+            "477",
+            "524",
+            "159",
+            "359",
+            "75"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1577.92145800002
+        },
+        {
+          "query": "\"I am coming soon!\", said the Lord",
+          "observed": [
+            "84",
+            "85"
+          ],
+          "top_5": [
+            "294",
+            "307",
+            "116",
+            "92",
+            "85"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 1321.3653340000064
+        },
+        {
+          "query": "Be Rich Toward God",
+          "observed": [
+            "233",
+            "452"
+          ],
+          "top_5": [
+            "332",
+            "442",
+            "53",
+            "28",
+            "3"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1301.6499579999845
+        },
+        {
+          "query": "The King with a Tender Heart Revived the Kingdom",
+          "observed": [
+            "224",
+            "262"
+          ],
+          "top_5": [
+            "448",
+            "311",
+            "374",
+            "425",
+            "4"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1158.5812499999975
+        },
+        {
+          "query": "Shall Two Walk Together, Except They Have Agreed?",
+          "observed": [
+            "364",
+            "5"
+          ],
+          "top_5": [
+            "428",
+            "390",
+            "127",
+            "107",
+            "413"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1298.810125000017
+        },
+        {
+          "query": "The Valley of Berachah",
+          "observed": [
+            "172",
+            "224"
+          ],
+          "top_5": [
+            "83",
+            "137",
+            "189",
+            "196",
+            "440"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 935.6830830000149
+        },
+        {
+          "query": "King Joash",
+          "observed": [
+            "224",
+            "262"
+          ],
+          "top_5": [
+            "316",
+            "448",
+            "453",
+            "424",
+            "425"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1231.5487079999912
+        },
+        {
+          "query": "The Home of Samuel",
+          "observed": [
+            "424",
+            "425"
+          ],
+          "top_5": [
+            "300",
+            "307",
+            "186",
+            "134",
+            "199"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 776.3568750000047
+        },
+        {
+          "query": "The Home of Rebekah",
+          "observed": [
+            "377",
+            "378"
+          ],
+          "top_5": [
+            "448",
+            "186",
+            "134",
+            "307",
+            "300"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 952.7697080000053
+        },
+        {
+          "query": "The Home of Abraham",
+          "observed": [
+            "120",
+            "5"
+          ],
+          "top_5": [
+            "3",
+            "300",
+            "186",
+            "417",
+            "307"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 862.6728329999764
+        },
+        {
+          "query": "The Home of Noah",
+          "observed": [
+            "165",
+            "344"
+          ],
+          "top_5": [
+            "300",
+            "307",
+            "186",
+            "134",
+            "417"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1528.3667909999963
+        },
+        {
+          "query": "The Home of Moses",
+          "observed": [
+            "496",
+            "497"
+          ],
+          "top_5": [
+            "186",
+            "300",
+            "307",
+            "417",
+            "134"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 840.6627499999786
+        },
+        {
+          "query": "The Home of Peter",
+          "observed": [
+            "442",
+            "89"
+          ],
+          "top_5": [
+            "307",
+            "300",
+            "186",
+            "134",
+            "417"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1465.922040999999
+        },
+        {
+          "query": "A Joyful Life",
+          "observed": [
+            "339",
+            "376"
+          ],
+          "top_5": [
+            "7",
+            "287",
+            "130a",
+            "96",
+            "339"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1337.6096659999916
+        },
+        {
+          "query": "Knowing that the testing of your faith produces endurance",
+          "observed": [
+            "515",
+            "516"
+          ],
+          "top_5": [
+            "138",
+            "356",
+            "211",
+            "464",
+            "484"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 841.947083000008
+        },
+        {
+          "query": "Identity in Christ",
+          "observed": [
+            "126",
+            "425"
+          ],
+          "top_5": [
+            "358",
+            "116",
+            "398",
+            "233",
+            "132a"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 772.3865000000103
+        },
+        {
+          "query": "Solomon's Prayer at the Temple Dedication",
+          "observed": [
+            "406",
+            "415"
+          ],
+          "top_5": [
+            "411",
+            "82",
+            "412",
+            "259",
+            "129"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 986.1601249999978
+        },
+        {
+          "query": "Who is the Greatest",
+          "observed": [
+            "350",
+            "369"
+          ],
+          "top_5": [
+            "514",
+            "457",
+            "426",
+            "348",
+            "482"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1010.218750000007
+        },
+        {
+          "query": "Orderly Worshiping",
+          "observed": [
+            "412",
+            "503"
+          ],
+          "top_5": [
+            "312",
+            "316",
+            "418",
+            "129",
+            "117"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1124.660083000009
+        },
+        {
+          "query": "Let the Lord Jesus Reign in Our Lives",
+          "observed": [
+            "157",
+            "358"
+          ],
+          "top_5": [
+            "170",
+            "79",
+            "233",
+            "16",
+            "481"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 991.9671669999843
+        },
+        {
+          "query": "Excel Even More",
+          "observed": [
+            "18",
+            "401"
+          ],
+          "top_5": [
+            "27",
+            "470",
+            "109",
+            "145",
+            "148"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1173.1349579999915
+        },
+        {
+          "query": "Your Sins Have Been Forgiven",
+          "observed": [
+            "236",
+            "237"
+          ],
+          "top_5": [
+            "37",
+            "106",
+            "132a",
+            "482",
+            "324"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 905.0287910000065
+        },
+        {
+          "query": "The Letter to the Church in Smyrna",
+          "observed": [
+            "203",
+            "204"
+          ],
+          "top_5": [
+            "171",
+            "174",
+            "289",
+            "131a",
+            "247"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 771.4252910000141
+        },
+        {
+          "query": "Rejoicing in Hope",
+          "observed": [
+            "11",
+            "240"
+          ],
+          "top_5": [
+            "448",
+            "36",
+            "299",
+            "503",
+            "89"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1010.666791999995
+        },
+        {
+          "query": "Do Not Give the Devil a Foothold",
+          "observed": [
+            "176",
+            "177"
+          ],
+          "top_5": [
+            "86",
+            "169",
+            "352",
+            "331",
+            "107"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 864.684957999998
+        },
+        {
+          "query": "What Do You Ask?",
+          "observed": [
+            "146",
+            "378"
+          ],
+          "top_5": [
+            "481",
+            "31",
+            "164",
+            "478",
+            "523"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1177.9140000000154
+        },
+        {
+          "query": "The Benjamites Who Helped David",
+          "observed": [
+            "233",
+            "416"
+          ],
+          "top_5": [
+            "223",
+            "58",
+            "287",
+            "278",
+            "469"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 870.1123749999908
+        },
+        {
+          "query": "Do two walk together unless they have agreed to meet?",
+          "observed": [
+            "156",
+            "403"
+          ],
+          "top_5": [
+            "413",
+            "390",
+            "127",
+            "428",
+            "123"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1013.2267920000118
+        },
+        {
+          "query": "Then he believed in the Lord, and He credited it to him as righteousness",
+          "observed": [
+            "226",
+            "376"
+          ],
+          "top_5": [
+            "230",
+            "357",
+            "150",
+            "66",
+            "136"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 848.7519169999871
+        },
+        {
+          "query": "Put on the Helmet of Salvation",
+          "observed": [
+            "170",
+            "436"
+          ],
+          "top_5": [
+            "380",
+            "356",
+            "121",
+            "365",
+            "18"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 770.3910829999927
+        },
+        {
+          "query": "Turning Our Lives Around: From Pain to Honour",
+          "observed": [
+            "336",
+            "367"
+          ],
+          "top_5": [
+            "481",
+            "478",
+            "476",
+            "201",
+            "264"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1086.2527499999999
+        },
+        {
+          "query": "Carry the ark of God back into the city!",
+          "observed": [
+            "382",
+            "501"
+          ],
+          "top_5": [
+            "154",
+            "105",
+            "498",
+            "311",
+            "115"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1113.6408749999873
+        },
+        {
+          "query": "Hezekiah, Who did What Was Right in the Sight of the Lord",
+          "observed": [
+            "224",
+            "347"
+          ],
+          "top_5": [
+            "448",
+            "46",
+            "115",
+            "315",
+            "152"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 955.3812080000057
+        },
+        {
+          "query": "Such Great Faith",
+          "observed": [
+            "136",
+            "208"
+          ],
+          "top_5": [
+            "356",
+            "484",
+            "473",
+            "171",
+            "464"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 775.3441670000143
+        },
+        {
+          "query": "What is the Reason for the Hope in You?",
+          "observed": [
+            "130",
+            "163"
+          ],
+          "top_5": [
+            "183",
+            "237",
+            "510",
+            "394",
+            "185"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 862.5932919999855
+        },
+        {
+          "query": "Put on the preparation of the gospel",
+          "observed": [
+            "269",
+            "270"
+          ],
+          "top_5": [
+            "276",
+            "286",
+            "125",
+            "380",
+            "117"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 916.3180000000182
+        },
+        {
+          "query": "Fifteen Extra Years",
+          "observed": [
+            "118",
+            "135"
+          ],
+          "top_5": [
+            "309",
+            "490",
+            "497",
+            "283",
+            "51a"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 858.5461659999964
+        },
+        {
+          "query": "Joyful Meeting",
+          "observed": [
+            "225",
+            "68"
+          ],
+          "top_5": [
+            "225",
+            "83",
+            "7",
+            "447",
+            "130a"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 964.6731250000187
+        },
+        {
+          "query": "Love is not Jealous",
+          "observed": [
+            "129",
+            "479"
+          ],
+          "top_5": [
+            "431",
+            "53",
+            "479",
+            "332",
+            "218"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 777.1277499999769
+        },
+        {
+          "query": "Elisha Became Sick",
+          "observed": [
+            "377",
+            "380"
+          ],
+          "top_5": [
+            "139",
+            "510",
+            "334",
+            "118",
+            "297"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 871.4172079999969
+        },
+        {
+          "query": "Spiritual Significance of Laying of Hands",
+          "observed": [
+            "494",
+            "504"
+          ],
+          "top_5": [
+            "346",
+            "34",
+            "515",
+            "432",
+            "68"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 741.9430409999848
+        },
+        {
+          "query": "Peace Which Surpasses All Comprehension",
+          "observed": [
+            "333",
+            "433"
+          ],
+          "top_5": [
+            "433",
+            "159",
+            "330",
+            "500",
+            "36"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 931.8793329999835
+        },
+        {
+          "query": "My Spirit Rejoices in God",
+          "observed": [
+            "162",
+            "163"
+          ],
+          "top_5": [
+            "299",
+            "11",
+            "448",
+            "126",
+            "522"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 925.8838339999897
+        },
+        {
+          "query": "The Axe Head Floated",
+          "observed": [
+            "347",
+            "351"
+          ],
+          "top_5": [
+            "121",
+            "365",
+            "76",
+            "418",
+            "422"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 898.7161670000035
+        },
+        {
+          "query": "Heal the Water at Jericho",
+          "observed": [
+            "129",
+            "513"
+          ],
+          "top_5": [
+            "213",
+            "42",
+            "46",
+            "285",
+            "513"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 849.457292000011
+        },
+        {
+          "query": "I Have Learned the Secret",
+          "observed": [
+            "486",
+            "514"
+          ],
+          "top_5": [
+            "354",
+            "455",
+            "166",
+            "17",
+            "280"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 764.8090829999887
+        },
+        {
+          "query": "Rejoice in the Lord Always",
+          "observed": [
+            "448",
+            "84"
+          ],
+          "top_5": [
+            "448",
+            "129a",
+            "11",
+            "84",
+            "223"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 978.3245410000063
+        },
+        {
+          "query": "The Summit of Pisgah",
+          "observed": [
+            "154",
+            "259"
+          ],
+          "top_5": [
+            "81",
+            "465",
+            "359",
+            "274b",
+            "368"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 892.1519170000067
+        },
+        {
+          "query": "You shall not put the Lord your God to the test",
+          "observed": [
+            "145",
+            "378"
+          ],
+          "top_5": [
+            "152",
+            "332",
+            "151",
+            "496",
+            "194"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 808.2283330000166
+        },
+        {
+          "query": "The Ravens Beside the Brook Cherith",
+          "observed": [
+            "287",
+            "392"
+          ],
+          "top_5": [
+            "388",
+            "63",
+            "48",
+            "440",
+            "286"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1443.9522499999953
+        },
+        {
+          "query": "Elijah prayed for the Rain",
+          "observed": [
+            "259",
+            "406"
+          ],
+          "top_5": [
+            "525",
+            "411",
+            "82",
+            "495",
+            "2"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1546.4478329999736
+        },
+        {
+          "query": "It is More Blessed to Give than to Receive",
+          "observed": [
+            "287",
+            "415"
+          ],
+          "top_5": [
+            "446",
+            "324",
+            "412",
+            "494",
+            "404"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 922.073332999986
+        },
+        {
+          "query": "Receiving Peace in Jesus Christ",
+          "observed": [
+            "330",
+            "433"
+          ],
+          "top_5": [
+            "159",
+            "433",
+            "457",
+            "11",
+            "116"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 988.7908329999959
+        },
+        {
+          "query": "A Church of Greater Nobility",
+          "observed": [
+            "164",
+            "364"
+          ],
+          "top_5": [
+            "174",
+            "171",
+            "289",
+            "316",
+            "131a"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 914.4611670000131
+        },
+        {
+          "query": "And tongues like fire appeared to them, distributing themselves, and rested on each one of them",
+          "observed": [
+            "247",
+            "252"
+          ],
+          "top_5": [
+            "205",
+            "138",
+            "68",
+            "249",
+            "217"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 1253.512958999977
+        },
+        {
+          "query": "Succession in the Family",
+          "observed": [
+            "101",
+            "3"
+          ],
+          "top_5": [
+            "453",
+            "329",
+            "464",
+            "5",
+            "425"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1051.6552909999746
+        },
+        {
+          "query": "From Paul to Timothy",
+          "observed": [
+            "379",
+            "380"
+          ],
+          "top_5": [
+            "32",
+            "399",
+            "148",
+            "139",
+            "329"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 978.2970839999905
+        },
+        {
+          "query": "Great Wisdom Saved a Small City",
+          "observed": [
+            "144",
+            "26"
+          ],
+          "top_5": [
+            "206",
+            "25",
+            "276",
+            "90",
+            "433"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1294.8787090000167
+        },
+        {
+          "query": "There is a Man Greater Than Jonah",
+          "observed": [
+            "101",
+            "99"
+          ],
+          "top_5": [
+            "445",
+            "139",
+            "154",
+            "347",
+            "471"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 856.8655420000084
+        },
+        {
+          "query": "Jesus, Our Lord and King",
+          "observed": [
+            "361",
+            "84"
+          ],
+          "top_5": [
+            "240",
+            "50",
+            "233",
+            "228",
+            "8"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1276.3681659999975
+        },
+        {
+          "query": "Lord Jesus' Commission - Preach the Gospel",
+          "observed": [
+            "286",
+            "427"
+          ],
+          "top_5": [
+            "276",
+            "287",
+            "269",
+            "38",
+            "286"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 808.280625000009
+        },
+        {
+          "query": "Be Joyful in the Hope",
+          "observed": [
+            "203",
+            "204"
+          ],
+          "top_5": [
+            "7",
+            "394",
+            "473",
+            "130a",
+            "382"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 824.0126670000052
+        },
+        {
+          "query": "Do not Leave the Devil a Foothold",
+          "observed": [
+            "167",
+            "168"
+          ],
+          "top_5": [
+            "352",
+            "331",
+            "169",
+            "382",
+            "319"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 906.5201660000071
+        }
+      ]
+    },
+    {
+      "name": "both",
+      "metrics": {
+        "queries_evaluated": 66,
+        "hit_rate": 0.16666666666666666,
+        "recall": 0.09090909090909091,
+        "mrr": 0.09696969696969696,
+        "ndcg": 0.07360012595434838
+      },
+      "candidate_recall": 0.26515151515151514,
+      "warm_search_ms_p50": 851.5114795000329,
+      "warm_search_ms_p95": 1311.4273329999974,
+      "queries": [
+        {
+          "query": "A Day of Good News",
+          "observed": [
+            "276",
+            "277"
+          ],
+          "top_5": [
+            "521",
+            "87",
+            "351",
+            "88",
+            "128"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 780.5821250000236
+        },
+        {
+          "query": "Return and Revive",
+          "observed": [
+            "45",
+            "99"
+          ],
+          "top_5": [
+            "248",
+            "306",
+            "309",
+            "266",
+            "14"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 890.9787919999985
+        },
+        {
+          "query": "The Crises of Rebuilding the Temple (Ezra 4)",
+          "observed": [
+            "175",
+            "176"
+          ],
+          "top_5": [
+            "482",
+            "33",
+            "328",
+            "171",
+            "319"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 714.6112499999617
+        },
+        {
+          "query": "Who Returned to Jerusalem?",
+          "observed": [
+            "242",
+            "359"
+          ],
+          "top_5": [
+            "477",
+            "195",
+            "338",
+            "130",
+            "524"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 955.3358329999924
+        },
+        {
+          "query": "\"I am coming soon!\", said the Lord",
+          "observed": [
+            "84",
+            "85"
+          ],
+          "top_5": [
+            "294",
+            "307",
+            "116",
+            "92",
+            "85"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 814.9815419999982
+        },
+        {
+          "query": "Be Rich Toward God",
+          "observed": [
+            "233",
+            "452"
+          ],
+          "top_5": [
+            "442",
+            "53",
+            "332",
+            "495",
+            "328"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 893.6204589999761
+        },
+        {
+          "query": "The King with a Tender Heart Revived the Kingdom",
+          "observed": [
+            "224",
+            "262"
+          ],
+          "top_5": [
+            "448",
+            "311",
+            "316",
+            "425",
+            "453"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1131.1169159999963
+        },
+        {
+          "query": "Shall Two Walk Together, Except They Have Agreed?",
+          "observed": [
+            "364",
+            "5"
+          ],
+          "top_5": [
+            "428",
+            "390",
+            "127",
+            "430",
+            "107"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1200.030624999954
+        },
+        {
+          "query": "The Valley of Berachah",
+          "observed": [
+            "172",
+            "224"
+          ],
+          "top_5": [
+            "189",
+            "137",
+            "196",
+            "83",
+            "270"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 831.1287920000154
+        },
+        {
+          "query": "King Joash",
+          "observed": [
+            "224",
+            "262"
+          ],
+          "top_5": [
+            "316",
+            "453",
+            "424",
+            "425",
+            "512"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 998.1368750000001
+        },
+        {
+          "query": "The Home of Samuel",
+          "observed": [
+            "424",
+            "425"
+          ],
+          "top_5": [
+            "134",
+            "424",
+            "199",
+            "195",
+            "97"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 762.2847499999921
+        },
+        {
+          "query": "The Home of Rebekah",
+          "observed": [
+            "377",
+            "378"
+          ],
+          "top_5": [
+            "189",
+            "448",
+            "134",
+            "186",
+            "196"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 845.1323749999915
+        },
+        {
+          "query": "The Home of Abraham",
+          "observed": [
+            "120",
+            "5"
+          ],
+          "top_5": [
+            "3",
+            "186",
+            "417",
+            "134",
+            "199"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 777.0280409999941
+        },
+        {
+          "query": "The Home of Noah",
+          "observed": [
+            "165",
+            "344"
+          ],
+          "top_5": [
+            "134",
+            "199",
+            "186",
+            "417",
+            "97"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 985.1237920000244
+        },
+        {
+          "query": "The Home of Moses",
+          "observed": [
+            "496",
+            "497"
+          ],
+          "top_5": [
+            "195",
+            "186",
+            "417",
+            "115",
+            "134"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 769.6449169999937
+        },
+        {
+          "query": "The Home of Peter",
+          "observed": [
+            "442",
+            "89"
+          ],
+          "top_5": [
+            "195",
+            "186",
+            "417",
+            "199",
+            "307"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 832.1995410000227
+        },
+        {
+          "query": "A Joyful Life",
+          "observed": [
+            "339",
+            "376"
+          ],
+          "top_5": [
+            "7",
+            "287",
+            "130a",
+            "96",
+            "431"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 847.0299169999862
+        },
+        {
+          "query": "Knowing that the testing of your faith produces endurance",
+          "observed": [
+            "515",
+            "516"
+          ],
+          "top_5": [
+            "138",
+            "356",
+            "484",
+            "211",
+            "464"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1054.866000000004
+        },
+        {
+          "query": "Identity in Christ",
+          "observed": [
+            "126",
+            "425"
+          ],
+          "top_5": [
+            "358",
+            "327",
+            "79",
+            "338",
+            "233"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 672.199916000011
+        },
+        {
+          "query": "Solomon's Prayer at the Temple Dedication",
+          "observed": [
+            "406",
+            "415"
+          ],
+          "top_5": [
+            "411",
+            "525",
+            "328",
+            "412",
+            "259"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 989.0729589999978
+        },
+        {
+          "query": "Who is the Greatest",
+          "observed": [
+            "350",
+            "369"
+          ],
+          "top_5": [
+            "72",
+            "329",
+            "348",
+            "339",
+            "325"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 890.9900829999629
+        },
+        {
+          "query": "Orderly Worshiping",
+          "observed": [
+            "412",
+            "503"
+          ],
+          "top_5": [
+            "316",
+            "312",
+            "129",
+            "328",
+            "525"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 802.3408330000166
+        },
+        {
+          "query": "Let the Lord Jesus Reign in Our Lives",
+          "observed": [
+            "157",
+            "358"
+          ],
+          "top_5": [
+            "170",
+            "141",
+            "448",
+            "10",
+            "16"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 843.8344999999572
+        },
+        {
+          "query": "Excel Even More",
+          "observed": [
+            "18",
+            "401"
+          ],
+          "top_5": [
+            "218",
+            "27",
+            "470",
+            "351",
+            "99"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 855.0922920000517
+        },
+        {
+          "query": "Your Sins Have Been Forgiven",
+          "observed": [
+            "236",
+            "237"
+          ],
+          "top_5": [
+            "37",
+            "106",
+            "246",
+            "482",
+            "473"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 876.551500000005
+        },
+        {
+          "query": "The Letter to the Church in Smyrna",
+          "observed": [
+            "203",
+            "204"
+          ],
+          "top_5": [
+            "174",
+            "171",
+            "289",
+            "411",
+            "131a"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 768.3499579999875
+        },
+        {
+          "query": "Rejoicing in Hope",
+          "observed": [
+            "11",
+            "240"
+          ],
+          "top_5": [
+            "448",
+            "36",
+            "299",
+            "503",
+            "370"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 804.2318340000065
+        },
+        {
+          "query": "Do Not Give the Devil a Foothold",
+          "observed": [
+            "176",
+            "177"
+          ],
+          "top_5": [
+            "331",
+            "32",
+            "86",
+            "40",
+            "352"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 785.7162500000072
+        },
+        {
+          "query": "What Do You Ask?",
+          "observed": [
+            "146",
+            "378"
+          ],
+          "top_5": [
+            "481",
+            "300",
+            "61",
+            "436",
+            "222"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 972.1060410000177
+        },
+        {
+          "query": "The Benjamites Who Helped David",
+          "observed": [
+            "233",
+            "416"
+          ],
+          "top_5": [
+            "223",
+            "168",
+            "230",
+            "287",
+            "114"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 878.6231250000469
+        },
+        {
+          "query": "Do two walk together unless they have agreed to meet?",
+          "observed": [
+            "156",
+            "403"
+          ],
+          "top_5": [
+            "413",
+            "428",
+            "390",
+            "123",
+            "107"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 825.5421249999699
+        },
+        {
+          "query": "Then he believed in the Lord, and He credited it to him as righteousness",
+          "observed": [
+            "226",
+            "376"
+          ],
+          "top_5": [
+            "230",
+            "357",
+            "150",
+            "136",
+            "477"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1199.7346249999623
+        },
+        {
+          "query": "Put on the Helmet of Salvation",
+          "observed": [
+            "170",
+            "436"
+          ],
+          "top_5": [
+            "380",
+            "379",
+            "170",
+            "138",
+            "356"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 706.3329999999723
+        },
+        {
+          "query": "Turning Our Lives Around: From Pain to Honour",
+          "observed": [
+            "336",
+            "367"
+          ],
+          "top_5": [
+            "209",
+            "183",
+            "240",
+            "306",
+            "28"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1132.039500000019
+        },
+        {
+          "query": "Carry the ark of God back into the city!",
+          "observed": [
+            "382",
+            "501"
+          ],
+          "top_5": [
+            "359",
+            "154",
+            "195",
+            "127",
+            "498"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 721.4754170000219
+        },
+        {
+          "query": "Hezekiah, Who did What Was Right in the Sight of the Lord",
+          "observed": [
+            "224",
+            "347"
+          ],
+          "top_5": [
+            "195",
+            "290",
+            "46",
+            "269",
+            "152"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1074.9762080000096
+        },
+        {
+          "query": "Such Great Faith",
+          "observed": [
+            "136",
+            "208"
+          ],
+          "top_5": [
+            "356",
+            "484",
+            "473",
+            "171",
+            "464"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 654.2614159999971
+        },
+        {
+          "query": "What is the Reason for the Hope in You?",
+          "observed": [
+            "130",
+            "163"
+          ],
+          "top_5": [
+            "156",
+            "204",
+            "82",
+            "237",
+            "185"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1003.0005829999595
+        },
+        {
+          "query": "Put on the preparation of the gospel",
+          "observed": [
+            "269",
+            "270"
+          ],
+          "top_5": [
+            "276",
+            "286",
+            "170",
+            "125",
+            "380"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 793.3577910000054
+        },
+        {
+          "query": "Fifteen Extra Years",
+          "observed": [
+            "118",
+            "135"
+          ],
+          "top_5": [
+            "309",
+            "493",
+            "490",
+            "371",
+            "497"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 771.4278340000078
+        },
+        {
+          "query": "Joyful Meeting",
+          "observed": [
+            "225",
+            "68"
+          ],
+          "top_5": [
+            "225",
+            "7",
+            "447",
+            "404",
+            "260"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 760.291000000052
+        },
+        {
+          "query": "Love is not Jealous",
+          "observed": [
+            "129",
+            "479"
+          ],
+          "top_5": [
+            "53",
+            "431",
+            "479",
+            "91",
+            "27"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 842.7749159999962
+        },
+        {
+          "query": "Elisha Became Sick",
+          "observed": [
+            "377",
+            "380"
+          ],
+          "top_5": [
+            "334",
+            "510",
+            "477",
+            "139",
+            "33"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 738.4096249999743
+        },
+        {
+          "query": "Spiritual Significance of Laying of Hands",
+          "observed": [
+            "494",
+            "504"
+          ],
+          "top_5": [
+            "346",
+            "488",
+            "432",
+            "34",
+            "295"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 845.3777089999903
+        },
+        {
+          "query": "Peace Which Surpasses All Comprehension",
+          "observed": [
+            "333",
+            "433"
+          ],
+          "top_5": [
+            "433",
+            "159",
+            "330",
+            "476",
+            "36"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 929.859375000035
+        },
+        {
+          "query": "My Spirit Rejoices in God",
+          "observed": [
+            "162",
+            "163"
+          ],
+          "top_5": [
+            "11",
+            "448",
+            "463",
+            "522",
+            "84"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 768.9533750000237
+        },
+        {
+          "query": "The Axe Head Floated",
+          "observed": [
+            "347",
+            "351"
+          ],
+          "top_5": [
+            "365",
+            "121",
+            "76",
+            "422",
+            "173"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 901.5814999999634
+        },
+        {
+          "query": "Heal the Water at Jericho",
+          "observed": [
+            "129",
+            "513"
+          ],
+          "top_5": [
+            "213",
+            "46",
+            "482",
+            "42",
+            "513"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 706.8575840000335
+        },
+        {
+          "query": "I Have Learned the Secret",
+          "observed": [
+            "486",
+            "514"
+          ],
+          "top_5": [
+            "280",
+            "406",
+            "386",
+            "17",
+            "136"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 762.6040839999746
+        },
+        {
+          "query": "Rejoice in the Lord Always",
+          "observed": [
+            "448",
+            "84"
+          ],
+          "top_5": [
+            "448",
+            "129a",
+            "11",
+            "463",
+            "84"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 847.9306670000142
+        },
+        {
+          "query": "The Summit of Pisgah",
+          "observed": [
+            "154",
+            "259"
+          ],
+          "top_5": [
+            "81",
+            "274b",
+            "359",
+            "195",
+            "465"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 790.2408329999844
+        },
+        {
+          "query": "You shall not put the Lord your God to the test",
+          "observed": [
+            "145",
+            "378"
+          ],
+          "top_5": [
+            "152",
+            "231",
+            "296a",
+            "496",
+            "211"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1318.8053330000002
+        },
+        {
+          "query": "The Ravens Beside the Brook Cherith",
+          "observed": [
+            "287",
+            "392"
+          ],
+          "top_5": [
+            "388",
+            "485",
+            "286",
+            "273",
+            "48"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1384.758583000007
+        },
+        {
+          "query": "Elijah prayed for the Rain",
+          "observed": [
+            "259",
+            "406"
+          ],
+          "top_5": [
+            "525",
+            "411",
+            "257",
+            "256",
+            "328"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1480.605166000032
+        },
+        {
+          "query": "It is More Blessed to Give than to Receive",
+          "observed": [
+            "287",
+            "415"
+          ],
+          "top_5": [
+            "415",
+            "494",
+            "445",
+            "412",
+            "289"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1631.9593329999975
+        },
+        {
+          "query": "Receiving Peace in Jesus Christ",
+          "observed": [
+            "330",
+            "433"
+          ],
+          "top_5": [
+            "159",
+            "433",
+            "457",
+            "11",
+            "70"
+          ],
+          "candidate_recall": 1.0,
+          "warm_search_ms": 1289.2933329999892
+        },
+        {
+          "query": "A Church of Greater Nobility",
+          "observed": [
+            "164",
+            "364"
+          ],
+          "top_5": [
+            "174",
+            "171",
+            "131a",
+            "316",
+            "289"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 747.271416999979
+        },
+        {
+          "query": "And tongues like fire appeared to them, distributing themselves, and rested on each one of them",
+          "observed": [
+            "247",
+            "252"
+          ],
+          "top_5": [
+            "249",
+            "205",
+            "168",
+            "311",
+            "217"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1267.7180830000339
+        },
+        {
+          "query": "Succession in the Family",
+          "observed": [
+            "101",
+            "3"
+          ],
+          "top_5": [
+            "453",
+            "329",
+            "5",
+            "94",
+            "464"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 1135.912167000015
+        },
+        {
+          "query": "From Paul to Timothy",
+          "observed": [
+            "379",
+            "380"
+          ],
+          "top_5": [
+            "139",
+            "32",
+            "338",
+            "366",
+            "269"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 884.3340000000239
+        },
+        {
+          "query": "Great Wisdom Saved a Small City",
+          "observed": [
+            "144",
+            "26"
+          ],
+          "top_5": [
+            "90",
+            "276",
+            "496",
+            "25",
+            "206"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 933.424666999997
+        },
+        {
+          "query": "There is a Man Greater Than Jonah",
+          "observed": [
+            "101",
+            "99"
+          ],
+          "top_5": [
+            "445",
+            "327",
+            "139",
+            "274a",
+            "347"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 782.2108750000325
+        },
+        {
+          "query": "Jesus, Our Lord and King",
+          "observed": [
+            "361",
+            "84"
+          ],
+          "top_5": [
+            "240",
+            "50",
+            "233",
+            "228",
+            "8"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 1062.1500419999848
+        },
+        {
+          "query": "Lord Jesus' Commission - Preach the Gospel",
+          "observed": [
+            "286",
+            "427"
+          ],
+          "top_5": [
+            "276",
+            "287",
+            "286",
+            "139",
+            "482"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 979.822874999968
+        },
+        {
+          "query": "Be Joyful in the Hope",
+          "observed": [
+            "203",
+            "204"
+          ],
+          "top_5": [
+            "7",
+            "276",
+            "225",
+            "35",
+            "473"
+          ],
+          "candidate_recall": 0.5,
+          "warm_search_ms": 892.593125000019
+        },
+        {
+          "query": "Do not Leave the Devil a Foothold",
+          "observed": [
+            "167",
+            "168"
+          ],
+          "top_5": [
+            "331",
+            "32",
+            "352",
+            "484",
+            "169"
+          ],
+          "candidate_recall": 0.0,
+          "warm_search_ms": 888.3382079999933
+        }
+      ]
+    }
+  ]
+}

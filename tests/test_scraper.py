@@ -2,6 +2,8 @@
 
 import json
 
+import pytest
+
 from choirnetwork.scraper import load_hymns
 
 
@@ -57,3 +59,21 @@ def test_load_hymns_accepts_legacy_corpus_without_bible_metadata(tmp_path):
 
     assert hymn.bible_verse == ""
     assert hymn.bible_reference == ""
+
+
+def test_scrape_cli_protects_reviewed_corpus_and_separate_outputs(monkeypatch, tmp_path):
+    from choirnetwork.cli import main
+
+    monkeypatch.setattr(
+        "choirnetwork.cli.scrape_hymnal",
+        lambda: (_ for _ in ()).throw(AssertionError("network call should not run")),
+    )
+    corpus = "data/raw/hymns.json"
+    cases = [
+        ["scrape", "--output", corpus],
+        ["scrape", "--missing-output", corpus],
+        ["scrape", "--output", str(tmp_path / "same.json"), "--missing-output", str(tmp_path / "same.json")],
+    ]
+    for args in cases:
+        with pytest.raises(SystemExit, match="Choose separate output files"):
+            main(args)
